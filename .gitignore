@@ -1,0 +1,11 @@
+node_modules
+*.log
+.next
+app
+dist
+package-lock.json
+
+.env*.local
+.env
+.DS_Store
+*.pem
