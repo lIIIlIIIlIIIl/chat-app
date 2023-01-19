@@ -1,17 +1,31 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 interface Props {
   text: string;
-  href: string;
+  path: string;
 }
 
 const MenuButton = (props: Props) => {
+  const router = useRouter();
+  const onClickHandler = () => {
+    router.push(`${props.path}`);
+  };
   return (
-    <div className="w-full text-center p-3 hover:bg-[#8b5cf6] cursor-pointer">
-      <Link href={props.href}>
-        <a className="text-white font-sans">{props.text}</a>
+    <li
+      className="w-full text-center p-3 hover:bg-[#1e3a8a] cursor-pointer"
+      onClick={onClickHandler}
+    >
+      <Link href={props.path}>
+        <a
+          className={
+            props.path === router.pathname ? "text-[#93c5fd]" : "text-white"
+          }
+        >
+          {props.text}
+        </a>
       </Link>
-    </div>
+    </li>
   );
 };
 
