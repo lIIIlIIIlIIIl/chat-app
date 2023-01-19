@@ -1,10 +1,16 @@
 import Aside from "../components/aside";
+import UserItem from "../components/userItem";
+import { userArr } from "./userlist";
 
 const Group = () => {
   return (
     <div className="w-screen h-screen flex">
       <Aside />
-      group
+      <ul className="w-full h-full pl-5 bg-[#F0F2F5]">
+        {userArr.map((el, idx) => (
+          <UserItem key={idx} nickname={el.nickname} message={el.message} />
+        ))}
+      </ul>
     </div>
   );
 };

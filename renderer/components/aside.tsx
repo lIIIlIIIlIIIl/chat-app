@@ -10,7 +10,7 @@ const menuArr = [
 const Aside = () => {
   return (
     <aside className="bg-[#0e0b53] w-1/6 h-full">
-      <ul className="border-2">
+      <ul>
         {menuArr.map((el, idx) => (
           <MenuButton text={el.text} key={idx} path={el.path} />
         ))}
