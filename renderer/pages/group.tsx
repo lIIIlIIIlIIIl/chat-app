@@ -1,12 +1,12 @@
 import Aside from "../components/aside";
 
-const UserList = () => {
+const Group = () => {
   return (
     <div className="w-screen h-screen flex">
       <Aside />
-      userlist
+      group
     </div>
   );
 };
 
-export default UserList;
+export default Group;

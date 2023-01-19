@@ -1,21 +1,19 @@
 import Link from "next/link";
+import MenuButton from "./menubutton";
 
 const menuArr = [
-  { text: "유저 목록", title: "userList" },
-  { text: "개인 채팅", title: "personal" },
-  { text: "그룹 채팅", title: "group" },
+  { text: "유저 목록", title: "userList", href: "/userlist" },
+  { text: "채팅", title: "personal", href: "/personal" },
+  { text: "그룹 채팅", title: "group", href: "/group" },
 ];
 
 const Aside = () => {
   return (
-    <aside className="bg-gray-900 w-1/6 ">
-      <div className="w-full h-10 text-white">유저 목록</div>
-      <div>개인 채팅</div>
-      <div>그룹 채팅</div>
-      <div className="bg-white w-5/6">
-        <Link href="/login" className="bg-gray-900 text-white">
-          loginPage
-        </Link>
+    <aside className="bg-[#5b21b6] w-1/6 h-full">
+      <div className="">
+        {menuArr.map((el, idx) => (
+          <MenuButton text={el.text} key={idx} href={el.href} />
+        ))}
       </div>
     </aside>
   );
