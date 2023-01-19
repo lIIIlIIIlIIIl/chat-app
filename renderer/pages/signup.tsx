@@ -19,7 +19,7 @@ const Signup = () => {
         password,
       };
       console.log(user);
-      router.push("/login");
+      router.push("/home");
     }
   };
   return (
@@ -66,8 +66,16 @@ const Signup = () => {
               }}
             />
           </div>
-          <div className="w-full mt-5">
-            <button className="w-full pt-1 pb-1 text-lg bg-[#fff700]">
+          <div className="w-full mt-5 flex justify-around">
+            <button
+              className="w-2/5 pt-1 pb-1 text-lg bg-[#fff700]"
+              onClick={() => {
+                router.back();
+              }}
+            >
+              취소
+            </button>
+            <button className="w-2/5 pt-1 pb-1 text-lg bg-[#fff700]">
               Signup
             </button>
           </div>
