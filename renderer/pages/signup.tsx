@@ -1,25 +1,43 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { signupFuc } from "../services/auth";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
   const [nickname, setNickname] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
 
   const router = useRouter();
 
-  const onSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (password === passwordConfirm) {
-      const user = {
-        email,
-        nickname,
-        password,
-      };
-      console.log(user);
-      router.push("/home");
+
+    if (email !== "" && password !== "" && passwordConfirm !== "") {
+      if (password !== passwordConfirm) {
+        setErrorMsg("비밀번호를 확인해주세요.");
+        console.log(errorMsg);
+      }
+      if (password === passwordConfirm) {
+        try {
+          await signupFuc(email, password);
+          setErrorMsg("");
+        } catch (error) {
+          switch (error.code) {
+            case "auth/weak-password":
+              setErrorMsg("비밀번호는 6자리 이상이어야 합니다");
+              break;
+            case "auth/invalid-email":
+              setErrorMsg("잘못된 이메일 주소입니다");
+              break;
+            case "auth/email-already-in-use":
+              setErrorMsg("이미 가입되어 있는 계정입니다");
+              break;
+          }
+        }
+      }
     }
   };
   return (
@@ -36,7 +54,7 @@ const Signup = () => {
               }}
             />
           </div>
-          <div className="w-full mt-5">
+          {/* <div className="w-full mt-5">
             <input
               placeholder="닉네임을 입력해주세요."
               className="border py-2 px-2 text-grey-darkest w-full"
@@ -45,7 +63,7 @@ const Signup = () => {
                 setNickname(e.target.value);
               }}
             />
-          </div>
+          </div> */}
           <div className="w-full mt-5">
             <input
               placeholder="비밀번호를 입력해주세요."

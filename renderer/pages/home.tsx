@@ -1,24 +1,34 @@
+import { onAuthStateChanged } from "firebase/auth";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
-
-const user = [
-  {
-    email: "snsn@naver.com",
-    password: "123123",
-  },
-];
+import { loginFuc } from "../services/auth";
+import { auth } from "../services/firebase";
 
 const Home = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
   const router = useRouter();
 
-  const onSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (user[0].email === email && user[0].password === password) {
-      console.log("로그인 성공");
-      router.push("/userlist");
+    if (email !== "" && password !== "") {
+      try {
+        await loginFuc(email, password).then(res => {
+          console.log(res.user);
+          router.push("/userlist");
+        });
+      } catch (error) {
+        switch (error.code) {
+          case "auth/wrong-password":
+            setErrorMsg("비밀번호가 틀렸습니다.");
+            break;
+          case "auth/user-not-found":
+            setErrorMsg("존재하지 않는 이메일입니다.");
+            break;
+        }
+      }
     }
   };
 
