@@ -1,4 +1,5 @@
 import Aside from "../components/aside";
+import ChatModal from "../components/Modal/chatModal";
 import UserItem from "../components/userItem";
 
 export const userArr = [
@@ -9,12 +10,13 @@ export const userArr = [
 
 const UserList = () => {
   return (
-    <div className="w-screen h-screen flex">
+    <div className="w-screen h-screen flex ">
       <Aside />
-      <ul className="w-full h-full pl-5 bg-[#F0F2F5]">
+      <ul className="w-full h-full pl-5 bg-[#F0F2F5] relative">
         {userArr.map((el, idx) => (
           <UserItem key={idx} nickname={el.nickname} message={el.message} />
         ))}
+        {/* <ChatModal /> */}
       </ul>
     </div>
   );
