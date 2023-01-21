@@ -11,13 +11,8 @@ const menuArr = [
 const Aside = () => {
   const router = useRouter();
   const onClickHandler = async () => {
-    try {
-      await logoutFuc().then(res => {
-        router.push("/home");
-      });
-    } catch (error) {
-      console.log(error);
-    }
+    await logoutFuc();
+    router.push("/home");
   };
   return (
     <aside className="bg-[#0e0b53] w-1/6 h-full">

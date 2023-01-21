@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { signupFuc } from "../services/auth";
+import { signupFuc, userProfileFuc } from "../services/auth";
+import { signupDB } from "../services/database";
+import { auth } from "../services/firebase";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
@@ -23,6 +25,14 @@ const Signup = () => {
       if (password === passwordConfirm) {
         try {
           await signupFuc(email, password);
+          await userProfileFuc(nickname);
+          await signupDB(email, nickname);
+          router.push("/home");
+
+          setEmail("");
+          setPassword("");
+          setNickname("");
+          setPasswordConfirm("");
           setErrorMsg("");
         } catch (error) {
           switch (error.code) {
@@ -54,7 +64,7 @@ const Signup = () => {
               }}
             />
           </div>
-          {/* <div className="w-full mt-5">
+          <div className="w-full mt-5">
             <input
               placeholder="닉네임을 입력해주세요."
               className="border py-2 px-2 text-grey-darkest w-full"
@@ -63,7 +73,7 @@ const Signup = () => {
                 setNickname(e.target.value);
               }}
             />
-          </div> */}
+          </div>
           <div className="w-full mt-5">
             <input
               placeholder="비밀번호를 입력해주세요."

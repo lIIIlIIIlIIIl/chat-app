@@ -11,7 +11,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
     auth.onAuthStateChanged(user => {
       if (!user) {
-        router.push("/home");
+        // router.push("/home");
       }
     });
   }, []);

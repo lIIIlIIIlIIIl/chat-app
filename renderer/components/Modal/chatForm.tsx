@@ -4,7 +4,7 @@ import { auth } from "../../services/firebase";
 
 const ChatForm = () => {
   const teatareaRef = useRef(null);
-  //   let uid = auth.currentUser.uid;
+  let uid = auth.currentUser.uid;
 
   const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -12,7 +12,7 @@ const ChatForm = () => {
       await sendChat({
         message: teatareaRef.current.value,
         timestamp: Date.now(),
-        // userId: uid,
+        userId: uid,
       });
     } catch (error) {
       console.log(error);
