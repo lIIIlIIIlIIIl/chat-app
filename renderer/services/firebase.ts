@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+import { getDatabase } from "firebase/database";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
@@ -11,11 +11,11 @@ const firebaseConfig = {
   appId: "1:523422922409:web:0bb6e1c45266441a169bb8",
   measurementId: "G-G4GS9J5BS6",
 };
-
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
+const database = getDatabase();
 
-export { app, auth };
+export { app, auth, database };
 
 // apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
 // authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
