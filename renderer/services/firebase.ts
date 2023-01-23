@@ -1,25 +1,20 @@
 import { initializeApp } from "firebase/app";
 import { getDatabase } from "firebase/database";
 import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAPw8PKLuK6Wt5n130MQ0YqcvsbLyoNSak",
-  authDomain: "chat-app-ccae0.firebaseapp.com",
-  projectId: "chat-app-ccae0",
-  storageBucket: "chat-app-ccae0.appspot.com",
-  messagingSenderId: "523422922409",
-  appId: "1:523422922409:web:0bb6e1c45266441a169bb8",
-  measurementId: "G-G4GS9J5BS6",
+  apiKey: process.env.NEXT_PUBLIC_APP_KEY,
+  authDomain: process.env.NEXT_PUBLIC_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_APP_ID,
 };
 const app = initializeApp(firebaseConfig);
-const auth = getAuth();
-const database = getDatabase();
 
-export { app, auth, database };
+const auth = getAuth(app);
+const database = getDatabase(app);
+const dbService = getFirestore(app);
 
-// apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-// authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-// projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-// storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-// messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-// appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+export { auth, database, dbService };
