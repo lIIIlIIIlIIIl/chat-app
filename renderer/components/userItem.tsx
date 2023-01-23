@@ -11,16 +11,16 @@ interface Porps {
   nickname: any;
   audienceUid: string;
   message?: string;
+  connected?: boolean;
 }
 
-const UserItem = ({ nickname, audienceUid, message }: Porps) => {
+const UserItem = ({ nickname, audienceUid, message, connected }: Porps) => {
   const [viewBtn, setViewBtn] = useState(false);
   const router = useRouter();
   const dispatch = useAppDispatch();
 
   const startChatWith = async () => {
     await startChat(audienceUid).then(res => {
-      console.log("철수");
       setViewBtn(e => !e);
       dispatch(
         chatActions.chatOpen({
@@ -40,6 +40,7 @@ const UserItem = ({ nickname, audienceUid, message }: Porps) => {
   const userClickHandler = () => {
     setViewBtn(e => !e);
   };
+  console.log(connected);
 
   return (
     <div className="w-full h-20 flex">
@@ -53,7 +54,16 @@ const UserItem = ({ nickname, audienceUid, message }: Porps) => {
           </div>
         </div>
         <div className="h-full w-full">
-          <div className="pl-2 pt-3 pb-0.5">{nickname}</div>
+          <div className="pl-2 pt-3 pb-0.5 ">
+            <span>{nickname}</span>
+            <span className="text-[12px] pl-2">
+              {connected === undefined
+                ? ""
+                : connected
+                ? "(온라인)"
+                : "(오프라인)"}
+            </span>
+          </div>
           <div className="pl-2 pt-0.5 pb-3 text-[#a8a29e]">{message}</div>
         </div>
       </div>

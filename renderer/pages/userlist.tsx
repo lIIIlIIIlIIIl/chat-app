@@ -15,28 +15,29 @@ export const userArr = [
 
 const UserList = () => {
   const router = useRouter();
-  const [users, setUsers] = useState([]);
+  const [userList, setuserList] = useState([]);
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const data = await getUserOnline();
-      console.log(data);
-      setUsers(data);
+      const { userList } = await getUserOnline();
+      setuserList(userList);
     };
     fetchUserData();
   }, []);
+  console.log(userList);
 
   return (
     <div className="w-screen h-screen flex ">
       <Aside />
       <div className="w-full h-full">
         <ul className="w-full h-full pl-5 bg-[#F0F2F5] ">
-          {users
-            ? users.map((el, idx) => (
+          {userList
+            ? userList.map((el, idx) => (
                 <UserItem
                   key={idx}
                   nickname={el.displayName}
                   audienceUid={el.uid}
+                  connected={el.connected}
                 />
               ))
             : null}

@@ -12,12 +12,12 @@ import {
   equalTo,
   remove,
 } from "@firebase/database";
-import { Timestamp } from "firebase/firestore";
 import { auth, database } from "./firebase";
 
 interface UserList {
   uid: string;
   displayName: string;
+  connected: boolean;
 }
 
 export const onUserConnect = () => {
@@ -26,8 +26,10 @@ export const onUserConnect = () => {
   const myDisplayNameRef = ref(database, `users/${uid}/displayName`);
   const lastOnlineRef = ref(database, `users/${uid}/lastOnline`);
   const connectedRef = ref(database, ".info/connected");
+  console.log(connectedRef);
   onValue(connectedRef, snap => {
     if (snap.val() === true) {
+      console.log(snap.val());
       set(myConnectionsRef, true);
       set(myDisplayNameRef, auth.currentUser.displayName);
       onDisconnect(myConnectionsRef).remove();
@@ -41,22 +43,20 @@ export const getUserOnline = async () => {
   const uid = auth.currentUser.uid;
   const connectedRef = ref(database, "users");
   try {
-    let result: UserList[] = [];
+    let userList: UserList[] = [];
+
     const response = await get(connectedRef);
     const users = Object.keys(response.val());
     users.forEach(user => {
       if (user !== uid) {
-        if (
-          response.val()[user].connected !== undefined &&
-          response.val()[user].connected === true
-        )
-          result.push({
-            uid: user,
-            displayName: response.val()[user].displayName,
-          });
+        userList.push({
+          uid: user,
+          displayName: response.val()[user].displayName,
+          connected: response.val()[user].connected,
+        });
       }
     });
-    return result;
+    return { userList };
   } catch (error) {
     console.log(error);
   }
