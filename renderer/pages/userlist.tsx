@@ -21,7 +21,7 @@ const UserList = () => {
     <div className="w-screen h-screen flex ">
       <Aside />
       <div className="w-full h-full">
-        <ul className="w-full h-full pl-5 bg-[#F0F2F5] ">
+        <ul className="w-full h-full pl-5 bg-[#F0F2F5] overflow-y-auto">
           {userList
             ? userList.map((el, idx) => (
                 <UserItem

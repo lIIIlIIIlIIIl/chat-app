@@ -64,10 +64,10 @@ const InviteModal = ({ roomUsers }: Props) => {
 
   return (
     <div className="bg-white absolute top-[50px] right-2 w-32 h-[50%] rounded-[9px] p-3 flex-col justify-between">
-      <div className="h-[90%]">
+      <div className="h-[90%] overflow-y-auto">
         {filterUsers &&
           filterUsers.map((el, index) => (
-            <div key={index} className="w-full flex mb-3">
+            <div key={index} className="w-full flex mb-4">
               <div>
                 <input type="checkbox" onChange={e => checkHandler(e, el)} />
               </div>
