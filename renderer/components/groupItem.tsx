@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useAppDispatch } from "../helper/reduxHooks";
 import { chatActions } from "../store/reducer/chatSlice";
 import { groupActions } from "../store/reducer/groupSlice";
@@ -13,6 +14,16 @@ interface Porps {
 
 const GroupItem = ({ roomName, roomUid, message, roomUsers }: Porps) => {
   const dispatch = useAppDispatch();
+  const [roomMembers, setRoomMembers] = useState([]);
+
+  useEffect(() => {
+    const roomMember = [];
+
+    roomUsers.map(el => {
+      roomMember.push(Object.values(el)[0]);
+    });
+    setRoomMembers(roomMember);
+  }, []);
 
   const startGroupChatWith = () => {
     dispatch(
@@ -22,7 +33,6 @@ const GroupItem = ({ roomName, roomUid, message, roomUsers }: Porps) => {
         members: roomUsers,
       })
     );
-
     dispatch(modalActions.openModal());
   };
 
@@ -35,8 +45,18 @@ const GroupItem = ({ roomName, roomUid, message, roomUsers }: Porps) => {
           </div>
         </div>
         <div className="h-full w-full" onClick={startGroupChatWith}>
-          <div className="pl-2 pt-3 pb-0.5 ">
-            <span>{roomName}</span>
+          <div className="pl-2 pt-3 pb-0.5 flex">
+            <div className="mr-5">
+              <span>{roomName}</span>
+            </div>
+            <div>
+              <span className="text-[] text-[12px] mr-2">맴버 :</span>
+              {roomMembers.map((el, index) => (
+                <span key={index} className="text-[] text-[12px] mr-2">
+                  {el}
+                </span>
+              ))}
+            </div>
           </div>
           <div className="pl-2 pt-0.5 pb-3 text-[#a8a29e]">{message}</div>
         </div>

@@ -47,7 +47,6 @@ const UserItem = ({
 
   const userClickHandler = () => {
     setViewBtn(e => !e);
-    console.log(roomUsers);
   };
 
   return (

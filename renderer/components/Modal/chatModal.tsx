@@ -46,7 +46,7 @@ const ChatModal = ({ exitChatRoom }) => {
     };
   }, []);
 
-  const sendMessage = (e?) => {
+  const sendMessage = e => {
     e.preventDefault();
 
     if (chatInput === "") return;
@@ -62,7 +62,7 @@ const ChatModal = ({ exitChatRoom }) => {
     if (e.key === "Enter") {
       if (e.nativeEvent.isComposing === false && isShiftUsed !== true) {
         e.preventDefault();
-        sendMessage();
+        sendMessage(e);
       }
     }
   };

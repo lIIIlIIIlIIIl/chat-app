@@ -26,10 +26,8 @@ export const onUserConnect = () => {
   const myDisplayNameRef = ref(database, `users/${uid}/displayName`);
   const lastOnlineRef = ref(database, `users/${uid}/lastOnline`);
   const connectedRef = ref(database, ".info/connected");
-  console.log(connectedRef);
   onValue(connectedRef, snap => {
     if (snap.val() === true) {
-      console.log(snap.val());
       set(myConnectionsRef, true);
       set(myDisplayNameRef, auth.currentUser.displayName);
       onDisconnect(myConnectionsRef).remove();

@@ -14,7 +14,6 @@ export const userArr = [
 ];
 
 const UserList = () => {
-  const router = useRouter();
   const [userList, setuserList] = useState([]);
 
   useEffect(() => {

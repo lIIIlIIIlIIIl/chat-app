@@ -14,7 +14,6 @@ const Home = () => {
 
     if (email !== "" && password !== "") {
       const result = await signInWithEmail(email, password);
-      console.log(result);
       if (
         result._tokenResponse !== undefined &&
         result._tokenResponse.registered === true

@@ -28,8 +28,6 @@ const Personal = () => {
     fetchChatData();
   }, []);
 
-  console.log(chatList);
-
   const exitChatRoom = () => {
     dispatch(modalActions.closeModal());
     dispatch(chatActions.chatClose());
