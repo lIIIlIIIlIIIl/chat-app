@@ -24,16 +24,16 @@ const Signup = () => {
       }
       if (password === passwordConfirm) {
         try {
-          await signupFuc(email, password);
-          await userProfileFuc(nickname);
-          await signupDB(email, nickname);
-          router.push("/home");
-
-          setEmail("");
-          setPassword("");
-          setNickname("");
-          setPasswordConfirm("");
-          setErrorMsg("");
+          await signupFuc(email, password).then(() => {
+            userProfileFuc(nickname);
+            signupDB(email, nickname);
+            router.push("/home");
+            setEmail("");
+            setPassword("");
+            setNickname("");
+            setPasswordConfirm("");
+            setErrorMsg("");
+          });
         } catch (error) {
           switch (error.code) {
             case "auth/weak-password":
@@ -96,15 +96,15 @@ const Signup = () => {
           </div>
           <div className="w-full mt-5 flex justify-around">
             <button
-              className="w-2/5 pt-1 pb-1 text-lg bg-[#fff700]"
+              className="w-2/5 pt-1 pb-1 text-lg bg-[#fff700] rounded-[9px]"
               onClick={() => {
                 router.back();
               }}
             >
               취소
             </button>
-            <button className="w-2/5 pt-1 pb-1 text-lg bg-[#fff700]">
-              Signup
+            <button className="w-2/5 pt-1 pb-1 text-lg bg-[#fff700] rounded-[9px]">
+              회원가입
             </button>
           </div>
         </form>

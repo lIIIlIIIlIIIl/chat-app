@@ -10,24 +10,6 @@ import {
 } from "firebase/auth";
 import { ref, set } from "firebase/database";
 
-// export const signUpWithEmail = async (email, password, nickname) => {
-//   try {
-//       const response = await createUserWithEmailAndPassword(authService, email, password)
-//       .then((res)=>{
-//           updateProfile(authService.currentUser, {
-//               displayName: nickname
-//           })
-//       })
-//       return response;
-//   } catch (error) {
-//       console.log(error);
-//       console.log(error.code)
-//       if(error.code === "auth/email-already-in-use") alert("사용중인 이메일입니다!")
-//       return error;
-//   }
-
-// }
-
 export const signInWithEmail = async (email: string, password: string) => {
   try {
     const response = await signInWithEmailAndPassword(auth, email, password);
