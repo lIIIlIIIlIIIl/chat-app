@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useAppDispatch } from "../helper/reduxHooks";
+import { modalActions } from "../store/reducer/modalSlice";
 
 interface Props {
   text: string;
@@ -8,7 +10,10 @@ interface Props {
 
 const MenuButton = (props: Props) => {
   const router = useRouter();
+  const dispatch = useAppDispatch();
+
   const onClickHandler = () => {
+    dispatch(modalActions.closeModal());
     router.push(`${props.path}`);
   };
   return (

@@ -10,6 +10,7 @@ const menuArr = [
 
 const Aside = () => {
   const router = useRouter();
+
   const onClickHandler = async () => {
     await logoutFuc();
     router.push("/home");
