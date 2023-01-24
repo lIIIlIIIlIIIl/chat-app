@@ -43,7 +43,7 @@ const Personal = () => {
 
       {!isVisible && (
         <ul className="w-full h-full pl-5 bg-[#F0F2F5] overflow-y-auto">
-          {chatList.length !== 0 ? (
+          {chatList &&
             chatList.map((el, idx) => (
               <PersonalItem
                 key={idx}
@@ -52,10 +52,7 @@ const Personal = () => {
                 audienceUid={el.uid}
                 roomUsers={el.roomUsers}
               />
-            ))
-          ) : (
-            <div>채팅 목록이 비어있습니다.</div>
-          )}
+            ))}
         </ul>
       )}
     </div>

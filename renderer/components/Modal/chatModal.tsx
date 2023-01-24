@@ -82,7 +82,7 @@ const ChatModal = ({ exitChatRoom }) => {
       <div className="w-[40%] h-full m-auto bg-[#5fadfb] rounded-[9px] pt-2 pb-2">
         <div className="w-full h-[10%] border-b-2 flex justify-between pl-2 pr-2">
           <div className="">
-            <div className="text-white">방 제목</div>
+            <div className="text-white">{displayName}</div>
           </div>
           <div className="">
             <button
