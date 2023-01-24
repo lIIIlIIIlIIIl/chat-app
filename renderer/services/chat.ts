@@ -16,6 +16,8 @@ type retrunType = {
   displayName: string;
 };
 export const startChat = async opponentUID => {
+  const roomUserlist = [];
+
   const uid = auth.currentUser.uid;
   const displayName = auth.currentUser.displayName;
   const myChatRoom = ref(database, `usersChatRoom/${uid}`);
@@ -27,7 +29,7 @@ export const startChat = async opponentUID => {
   const oppenentNameRef = ref(database, `users/${opponentUID}/displayName`);
   const oppenentName = await get(oppenentNameRef);
   let hasRoom = false;
-  const myList = await get(myChatRoom);
+  const myList = await get(myChatRoom); // 내 모든 채팅 목록
   for (let key in myList.val()) {
     if (key === opponentUID) {
       hasRoom = true;
@@ -41,13 +43,17 @@ export const startChat = async opponentUID => {
     const randomRoomID =
       Date.now().toString(36) + Math.random().toString(36).slice(2);
     const chatRoomRef = ref(database, `oneOnOneChatRooms/${randomRoomID}`);
+
     set(myChatRoomWithOppoent, randomRoomID);
     set(opponentChatRoom, randomRoomID);
+
     const opponent = {};
     const me = {};
     opponent[opponentUID] = oppenentName.val();
     me[uid] = displayName;
-    set(chatRoomRef, { users: [opponent, me], chat: ["chat start"] });
+    roomUserlist.push(opponent, me);
+
+    set(chatRoomRef, { users: roomUserlist, chat: ["chat start"] });
     return randomRoomID;
   }
 };
@@ -98,6 +104,7 @@ export const startChatRoom = async chatRoomUID => {
 export const sendChat = async (chatRoomUID, message) => {
   const uid = auth.currentUser.uid;
   const displayName = auth.currentUser.displayName;
+
   const chatMessageRef = ref(database, `oneOnOneChatRooms/${chatRoomUID}/chat`);
   const chat = await get(chatMessageRef);
   if (chat.val()) {

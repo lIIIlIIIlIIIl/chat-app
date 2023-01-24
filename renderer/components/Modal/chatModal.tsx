@@ -46,12 +46,14 @@ const ChatModal = ({ exitChatRoom }) => {
     };
   }, []);
 
+  console.log(roomId);
   const sendMessage = e => {
     e.preventDefault();
 
     if (chatInput === "") return;
     sendChat(roomId, chatInput);
     setChatInput("");
+    console.log(roomId, chatInput);
   };
 
   const keyUpHandler = e => {

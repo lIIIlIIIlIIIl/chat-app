@@ -1,12 +1,12 @@
 import Aside from "../components/aside";
 import UserItem from "../components/userItem";
-import { userArr } from "./userlist";
 import { useAppDispatch, useAppSelector } from "../helper/reduxHooks";
 import ChatModal from "../components/Modal/chatModal";
 import { useEffect, useState } from "react";
 import { getChatInfos, getChatRooms } from "../services/chat";
 import { modalActions } from "../store/reducer/modalSlice";
 import { chatActions } from "../store/reducer/chatSlice";
+import PersonalItem from "../components/personalItem";
 
 const Personal = () => {
   const [chatList, setChatList] = useState([]);
@@ -32,6 +32,7 @@ const Personal = () => {
     dispatch(modalActions.closeModal());
     dispatch(chatActions.chatClose());
   };
+  console.log(chatList);
 
   return (
     <div className="w-screen h-screen flex">
@@ -39,10 +40,10 @@ const Personal = () => {
       {isVisible && <ChatModal exitChatRoom={exitChatRoom} />}
 
       {!isVisible && (
-        <ul className="w-full h-full pl-5 bg-[#F0F2F5] scroll-y">
+        <ul className="w-full h-full pl-5 bg-[#F0F2F5] overflow-y-auto">
           {chatList &&
             chatList.map((el, idx) => (
-              <UserItem
+              <PersonalItem
                 key={idx}
                 nickname={Object.values(el.user)[0]}
                 message={el.chat[el.chat.length - 1].message}

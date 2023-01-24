@@ -58,7 +58,8 @@ const InviteModal = ({ roomUsers }: Props) => {
   };
 
   const inviteClickHandler = async () => {
-    let roomId = await startGroupChat(checkedList);
+    startGroupChat(checkedList);
+    dispatch(modalActions.inviteModalClose());
   };
 
   return (

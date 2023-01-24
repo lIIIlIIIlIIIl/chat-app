@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { makeDate } from "../helper/helperFuc";
 import { useAppDispatch } from "../helper/reduxHooks";
 import { startChat } from "../services/chat";
@@ -26,24 +26,23 @@ const UserItem = ({
   const router = useRouter();
   const dispatch = useAppDispatch();
 
-  const startChatWith = async () => {
-    await startChat(audienceUid).then(res => {
-      setViewBtn(e => !e);
-      dispatch(
-        chatActions.chatOpen({
-          roomId: audienceUid,
-          displayName: nickname,
-          roomUsers: roomUsers,
-        })
-      );
-    });
+  const startChatWith = useCallback(async () => {
+    await startChat(audienceUid);
+    setViewBtn(e => !e);
+    dispatch(
+      chatActions.chatOpen({
+        roomId: audienceUid,
+        displayName: nickname,
+        roomUsers: roomUsers,
+      })
+    );
 
     dispatch(modalActions.openModal());
 
     if (router.pathname !== "/person") {
       router.push("/personal");
     }
-  };
+  }, []);
 
   const userClickHandler = () => {
     setViewBtn(e => !e);

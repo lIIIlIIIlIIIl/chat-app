@@ -14,7 +14,6 @@ import {
 import { getUserOnline } from "../services/userStatus";
 import { groupActions } from "../store/reducer/groupSlice";
 import { modalActions } from "../store/reducer/modalSlice";
-import { userArr } from "./userlist";
 
 interface Users {
   uid: string;

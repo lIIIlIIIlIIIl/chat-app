@@ -7,12 +7,6 @@ import { getUserList } from "../services/database";
 import { auth } from "../services/firebase";
 import { getUserOnline } from "../services/userStatus";
 
-export const userArr = [
-  { nickname: "홍길동", message: "테스트중입니다" },
-  { nickname: "안중근" },
-  { nickname: "김구" },
-];
-
 const UserList = () => {
   const [userList, setuserList] = useState([]);
 
@@ -23,7 +17,6 @@ const UserList = () => {
     };
     fetchUserData();
   }, []);
-
   return (
     <div className="w-screen h-screen flex ">
       <Aside />
