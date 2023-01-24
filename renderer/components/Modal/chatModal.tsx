@@ -52,7 +52,6 @@ const ChatModal = ({ exitChatRoom }) => {
     if (chatInput === "") return;
     sendChat(roomId, chatInput);
     setChatInput("");
-    console.log(roomId, chatInput);
   };
 
   const keyUpHandler = e => {
