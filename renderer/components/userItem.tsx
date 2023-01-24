@@ -12,9 +12,16 @@ interface Porps {
   audienceUid: string;
   message?: string;
   connected?: boolean;
+  roomUsers?: [];
 }
 
-const UserItem = ({ nickname, audienceUid, message, connected }: Porps) => {
+const UserItem = ({
+  nickname,
+  audienceUid,
+  message,
+  connected,
+  roomUsers,
+}: Porps) => {
   const [viewBtn, setViewBtn] = useState(false);
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -26,6 +33,7 @@ const UserItem = ({ nickname, audienceUid, message, connected }: Porps) => {
         chatActions.chatOpen({
           roomId: audienceUid,
           displayName: nickname,
+          roomUsers: roomUsers,
         })
       );
     });
@@ -39,8 +47,8 @@ const UserItem = ({ nickname, audienceUid, message, connected }: Porps) => {
 
   const userClickHandler = () => {
     setViewBtn(e => !e);
+    console.log(roomUsers);
   };
-  console.log(connected);
 
   return (
     <div className="w-full h-20 flex">
@@ -82,10 +90,3 @@ const UserItem = ({ nickname, audienceUid, message, connected }: Porps) => {
 };
 
 export default UserItem;
-
-// let myUid = "BcLpgBYVGBMl9lufoLbgXeBpc9v2";
-// let myNickname = "누누";
-// const roomTitle = `${nickname}`;
-// const roomUserList = [props.audienceUid, myUid];
-// const roomUserName = [props.nickname, myNickname];
-// const roomId = `@make@${myUid}@time@${makeDate()}`;

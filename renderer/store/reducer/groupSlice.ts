@@ -1,14 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface Payload {
-  uid: string;
+  roomId: string;
   displayName: string;
   members: string[];
-  lastChatUpdate: string;
+  lastChatUpdate?: string;
 }
 
 const initialState: Payload = {
-  uid: "",
+  roomId: "",
   displayName: "",
   members: [],
   lastChatUpdate: "",
@@ -19,13 +19,13 @@ const groupSlice = createSlice({
   initialState,
   reducers: {
     startGroupInfo: (state, action: PayloadAction<Payload>) => {
-      state.uid = action.payload.uid;
+      state.roomId = action.payload.roomId;
       state.displayName = action.payload.displayName;
       state.members = action.payload.members;
       state.lastChatUpdate = action.payload.lastChatUpdate;
     },
     endGroupInfo: state => {
-      state.uid = "";
+      state.roomId = "";
       state.displayName = "";
       state.members = [];
       state.lastChatUpdate = "";

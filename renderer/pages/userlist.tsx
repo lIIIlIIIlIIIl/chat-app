@@ -24,7 +24,6 @@ const UserList = () => {
     };
     fetchUserData();
   }, []);
-  console.log(userList);
 
   return (
     <div className="w-screen h-screen flex ">

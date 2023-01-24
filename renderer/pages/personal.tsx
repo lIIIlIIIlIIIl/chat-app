@@ -9,7 +9,6 @@ import { modalActions } from "../store/reducer/modalSlice";
 import { chatActions } from "../store/reducer/chatSlice";
 
 const Personal = () => {
-  const { roomId, displayName } = useAppSelector(state => state.chat);
   const [chatList, setChatList] = useState([]);
 
   const { isVisible } = useAppSelector(state => state.modal);
@@ -19,6 +18,7 @@ const Personal = () => {
     const fetchChatData = async () => {
       const data = await getChatRooms();
       data.forEach(async el => {
+        // el.uid는 랜덤 채팅이름
         await getChatInfos(el.uid).then(res => {
           Object.assign(res, { uid: el.uid });
           setChatList(prev => [...prev, res]);
@@ -26,28 +26,14 @@ const Personal = () => {
       });
     };
     fetchChatData();
-
-    // if (
-    //   roomId !== undefined &&
-    //   roomId !== "" &&
-    //   displayName !== undefined &&
-    //   displayName !== ""
-    // ) {
-    //   dispatch(roomActions.startRoomInfo({ roomId, displayName }));
-    // }
   }, []);
+
+  console.log(chatList);
 
   const exitChatRoom = () => {
     dispatch(modalActions.closeModal());
-    dispatch(
-      chatActions.chatOpen({
-        roomId: "",
-        displayName: "",
-      })
-    );
+    dispatch(chatActions.chatClose());
   };
-
-  console.log(chatList);
 
   return (
     <div className="w-screen h-screen flex">
@@ -63,6 +49,7 @@ const Personal = () => {
                 nickname={Object.values(el.user)[0]}
                 message={el.chat[el.chat.length - 1].message}
                 audienceUid={el.uid}
+                roomUsers={el.roomUsers}
               />
             ))}
         </ul>

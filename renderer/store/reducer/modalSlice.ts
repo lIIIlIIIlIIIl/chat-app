@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   isVisible: false,
+  inviteView: false,
 };
 
 const modalSlice = createSlice({
@@ -13,6 +14,12 @@ const modalSlice = createSlice({
     },
     closeModal: state => {
       state.isVisible = false;
+    },
+    inviteModalOpen: state => {
+      state.inviteView = true;
+    },
+    inviteModalClose: state => {
+      state.inviteView = false;
     },
   },
 });

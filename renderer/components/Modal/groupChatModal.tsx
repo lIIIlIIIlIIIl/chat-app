@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import { getMyUID } from "../../services/auth";
-import { sendChat, startChatRoom } from "../../services/chat";
+import { sendGroupChat, startGroupChatRoom } from "../../services/chat";
 import { useAppDispatch, useAppSelector } from "../../helper/reduxHooks";
 
 const myChatCssProps: React.CSSProperties = {
@@ -21,17 +21,16 @@ const chatCssProps: React.CSSProperties = {
   paddingLeft: "5px",
 };
 
-const ChatModal = ({ exitChatRoom }) => {
+const GroupChatModal = ({ exitChatRoom }) => {
   const [chatInput, setChatInput] = useState("");
   const [isShiftUsed, setIsShiftUsed] = useState(false);
   const [chat, setChat] = useState([]);
 
-  const dispatch = useAppDispatch();
   const myUID = getMyUID();
   const ref = useRef(window);
   const messageEndRef = useRef(null);
-  const { roomId, displayName, roomUsers } = useAppSelector(
-    state => state.chat
+  const { roomId, displayName, members, lastChatUpdate } = useAppSelector(
+    state => state.group
   );
 
   useEffect(() => {
@@ -39,7 +38,7 @@ const ChatModal = ({ exitChatRoom }) => {
       setChat(e.detail);
     };
     ref.current.addEventListener(`message/${roomId}`, handledMessageEvent);
-    startChatRoom(roomId);
+    startGroupChatRoom(roomId);
 
     return () => {
       ref.current.removeEventListener(`message/${roomId}`, handledMessageEvent);
@@ -50,7 +49,7 @@ const ChatModal = ({ exitChatRoom }) => {
     e.preventDefault();
 
     if (chatInput === "") return;
-    sendChat(roomId, chatInput);
+    sendGroupChat(roomId, chatInput);
     setChatInput("");
   };
 
@@ -81,7 +80,7 @@ const ChatModal = ({ exitChatRoom }) => {
       <div className="w-[40%] h-full m-auto bg-[#5fadfb] rounded-[9px] pt-2 pb-2">
         <div className="w-full h-[10%] border-b-2 flex justify-between pl-2 pr-2">
           <div className="">
-            <div className="text-white">방 제목</div>
+            <div className="text-white">{displayName}</div>
           </div>
           <div className="">
             <button
@@ -106,8 +105,8 @@ const ChatModal = ({ exitChatRoom }) => {
                         borderRadius: "5px",
                         marginLeft: "auto",
                         padding: "2px",
-                        paddingLeft: "5px",
-                        paddingRight: "5px",
+                        paddingLeft: "10px",
+                        paddingRight: "10px",
                       }}
                     >
                       {chatting.message}
@@ -126,8 +125,8 @@ const ChatModal = ({ exitChatRoom }) => {
                         borderRadius: "5px",
                         marginRight: "auto",
                         padding: "2px",
-                        paddingLeft: "5px",
-                        paddingRight: "5px",
+                        paddingLeft: "10px",
+                        paddingRight: "10px",
                       }}
                     >
                       {chatting.message}
@@ -143,7 +142,7 @@ const ChatModal = ({ exitChatRoom }) => {
               <textarea
                 cols={10}
                 rows={5}
-                className="w-full h-full border-none  focus:outline-none p-3 pr-3 resize-none"
+                className="w-full h-full border-none  focus:outline-none pl-3 p-3 resize-none"
                 value={chatInput}
                 onChange={e => setChatInput(e.target.value)}
                 onKeyDown={e => keyDownHandler(e)}
@@ -162,4 +161,4 @@ const ChatModal = ({ exitChatRoom }) => {
   );
 };
 
-export default ChatModal;
+export default GroupChatModal;
