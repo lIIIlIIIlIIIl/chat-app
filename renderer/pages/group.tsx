@@ -6,11 +6,7 @@ import GroupChatModal from "../components/Modal/groupChatModal";
 import InviteModal from "../components/Modal/inviteModal";
 import UserItem from "../components/userItem";
 import { useAppDispatch, useAppSelector } from "../helper/reduxHooks";
-import {
-  getChatRooms,
-  getGroupChatInfos,
-  startGroupChat,
-} from "../services/chat";
+import { getGroupChatInfos, getGroupChatRooms } from "../services/chat";
 import { getUserOnline } from "../services/userStatus";
 import { groupActions } from "../store/reducer/groupSlice";
 import { modalActions } from "../store/reducer/modalSlice";
@@ -34,7 +30,7 @@ const Group = () => {
 
   useEffect(() => {
     const fetchChatData = async () => {
-      getChatRooms().then(res => {
+      getGroupChatRooms().then(res => {
         let roomId = res.filter(el => el.roomId.includes("groupchat"));
         roomId.map(async el => {
           await getGroupChatInfos(el.uid).then(res => {

@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useAppDispatch } from "../helper/reduxHooks";
+import { chatActions } from "../store/reducer/chatSlice";
+import { groupActions } from "../store/reducer/groupSlice";
 import { modalActions } from "../store/reducer/modalSlice";
 
 interface Props {
@@ -14,6 +16,8 @@ const MenuButton = (props: Props) => {
 
   const onClickHandler = () => {
     dispatch(modalActions.closeModal());
+    dispatch(groupActions.endGroupInfo());
+    dispatch(chatActions.chatClose());
     router.push(`${props.path}`);
   };
   return (

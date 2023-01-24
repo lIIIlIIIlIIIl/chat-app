@@ -7,11 +7,13 @@ import { getChatInfos, getChatRooms } from "../services/chat";
 import { modalActions } from "../store/reducer/modalSlice";
 import { chatActions } from "../store/reducer/chatSlice";
 import PersonalItem from "../components/personalItem";
+import { useRouter } from "next/router";
 
 const Personal = () => {
   const [chatList, setChatList] = useState([]);
-
   const { isVisible } = useAppSelector(state => state.modal);
+
+  const router = useRouter();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -31,8 +33,8 @@ const Personal = () => {
   const exitChatRoom = () => {
     dispatch(modalActions.closeModal());
     dispatch(chatActions.chatClose());
+    router.push("/personal");
   };
-  console.log(chatList);
 
   return (
     <div className="w-screen h-screen flex">
@@ -41,7 +43,7 @@ const Personal = () => {
 
       {!isVisible && (
         <ul className="w-full h-full pl-5 bg-[#F0F2F5] overflow-y-auto">
-          {chatList &&
+          {chatList.length !== 0 ? (
             chatList.map((el, idx) => (
               <PersonalItem
                 key={idx}
@@ -50,7 +52,10 @@ const Personal = () => {
                 audienceUid={el.uid}
                 roomUsers={el.roomUsers}
               />
-            ))}
+            ))
+          ) : (
+            <div>채팅 목록이 비어있습니다.</div>
+          )}
         </ul>
       )}
     </div>

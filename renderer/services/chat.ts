@@ -134,7 +134,7 @@ export const startGroupChat = opponentUIDs => {
   //userChatRoom -> 내 uid -> GroupChat-randomNumber -> 채팅방 이름
   const uid = auth.currentUser.uid;
   const displayName = auth.currentUser.displayName;
-  const myChatRoomRef = ref(database, `usersChatRoom/${uid}/${randomString}`);
+  const myChatRoomRef = ref(database, `groupChatRoom/${uid}/${randomString}`);
   set(myChatRoomRef, randomRoomID);
 
   //userChatRoom -> 초대된 유저 uid -> GroupChat-randomNumber -> 채팅방 이름
@@ -145,7 +145,7 @@ export const startGroupChat = opponentUIDs => {
     // el.uid
     const opponentChatRoomRef = ref(
       database,
-      `usersChatRoom/${el.uid}/${randomString}`
+      `groupChatRoom/${el.uid}/${randomString}`
     );
     set(opponentChatRoomRef, randomRoomID);
   });
@@ -210,6 +210,18 @@ export const sendGroupChat = async (chatRoomUID, message) => {
   });
 };
 
+export const getGroupChatRooms = async () => {
+  let result: ChattingList[] = [];
+  const uid = auth.currentUser.uid;
+  const myChatRoomRef = ref(database, `groupChatRoom/${uid}`);
+  const myChatRoom = await get(myChatRoomRef);
+  for (let key in myChatRoom.val()) {
+    // key : 유저의 uid
+    result.push({ roomId: key, uid: myChatRoom.val()[key] });
+  }
+  // result : 채팅방의 랜덤 이름들
+  return result;
+};
 /*
 초대하기
 

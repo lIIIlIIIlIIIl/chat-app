@@ -46,7 +46,6 @@ const ChatModal = ({ exitChatRoom }) => {
     };
   }, []);
 
-  console.log(roomId);
   const sendMessage = e => {
     e.preventDefault();
 
