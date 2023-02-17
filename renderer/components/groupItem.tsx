@@ -13,7 +13,7 @@ interface Porps {
 
 const GroupItem = ({ roomName, roomUid, message, roomUsers }: Porps) => {
   const dispatch = useAppDispatch();
-  const [roomMembers, setRoomMembers] = useState([]);
+  const [roomMembers, setRoomMembers] = useState<string[]>([]);
 
   useEffect(() => {
     const roomMember = [];
@@ -24,7 +24,7 @@ const GroupItem = ({ roomName, roomUid, message, roomUsers }: Porps) => {
     setRoomMembers(roomMember);
   }, []);
 
-  const startGroupChatWith = () => {
+  const startGroupChatWith = (): void => {
     dispatch(
       groupActions.startGroupInfo({
         roomId: roomUid,
@@ -50,7 +50,7 @@ const GroupItem = ({ roomName, roomUid, message, roomUsers }: Porps) => {
             </div>
             <div>
               <span className="text-[] text-[12px] mr-2">맴버 :</span>
-              {roomMembers.map((el, index) => (
+              {roomMembers.map((el: string, index: number) => (
                 <span key={index} className="text-[] text-[12px] mr-2">
                   {el}
                 </span>

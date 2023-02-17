@@ -15,7 +15,7 @@ type retrunType = {
   uid: string;
   displayName: string;
 };
-export const startChat = async opponentUID => {
+export const startChat = async (opponentUID: string) => {
   const roomUserlist = [];
 
   const uid = auth.currentUser.uid;
@@ -73,7 +73,7 @@ export const getChatRooms = async () => {
   return result;
 };
 
-export const getChatInfos = async uid => {
+export const getChatInfos = async (uid: string) => {
   // uid : 채팅방 랜덤 이름
   let result: ChatInfo = { user: "", chat: [], roomUsers: [] };
   const myName = auth.currentUser.displayName;
@@ -91,7 +91,7 @@ export const getChatInfos = async uid => {
   return result;
 };
 
-export const startChatRoom = async chatRoomUID => {
+export const startChatRoom = async (chatRoomUID: string) => {
   const chatMessageRef = ref(database, `oneOnOneChatRooms/${chatRoomUID}/chat`);
 
   onValue(chatMessageRef, snap => {
@@ -102,7 +102,7 @@ export const startChatRoom = async chatRoomUID => {
   });
 };
 
-export const sendChat = async (chatRoomUID, message) => {
+export const sendChat = async (chatRoomUID: string, message: string) => {
   const uid = auth.currentUser.uid;
   const displayName = auth.currentUser.displayName;
 
@@ -123,7 +123,13 @@ export const sendChat = async (chatRoomUID, message) => {
 // ------------------------
 // ------------------------
 
-export const startGroupChat = opponentUIDs => {
+interface OpponentUIDs {
+  connected: boolean | undefined;
+  displayName: string;
+  uid: string;
+}
+
+export const startGroupChat = (opponentUIDs: OpponentUIDs[]) => {
   const roomUserList = [];
   const me = {};
 
@@ -139,7 +145,7 @@ export const startGroupChat = opponentUIDs => {
   set(myChatRoomRef, randomRoomID);
 
   //userChatRoom -> 초대된 유저 uid -> GroupChat-randomNumber -> 채팅방 이름
-  opponentUIDs.map(el => {
+  opponentUIDs.map((el: OpponentUIDs) => {
     const oppenent = {};
     oppenent[el.uid] = el.displayName;
     roomUserList.push(oppenent);
@@ -160,14 +166,20 @@ export const startGroupChat = opponentUIDs => {
   return randomRoomID;
 };
 
-export const getGroupChatInfos = async roomId => {
+// interface ChatRoomInfo {
+//   chat: { displayName: string; message: string; uid: string }[];
+//   lastChatUpdate: { displayName: string; message: string; writerUID: string };
+//   users: string[];
+// }
+
+export const getGroupChatInfos = async (roomId: string) => {
   let result = { room: "", chat: [], roomUsers: [], userDisplayName: [] };
 
   const chatRoomRef = ref(database, `groupChatRooms/${roomId}`);
   const chatRoomInfo = await (await get(chatRoomRef)).val();
 
   const countUsers = chatRoomInfo.users.length;
-  const users = chatRoomInfo.users.map(el => Object.keys(el));
+  const users = chatRoomInfo.users.map((el: string[]) => Object.keys(el));
 
   result.chat = chatRoomInfo.chat;
   result.roomUsers = chatRoomInfo.users;
@@ -177,7 +189,7 @@ export const getGroupChatInfos = async roomId => {
   return result;
 };
 
-export const startGroupChatRoom = async chatRoomUID => {
+export const startGroupChatRoom = async (chatRoomUID: string) => {
   const chatMessageRef = ref(database, `groupChatRooms/${chatRoomUID}/chat`);
 
   onValue(chatMessageRef, snap => {
@@ -188,7 +200,7 @@ export const startGroupChatRoom = async chatRoomUID => {
   });
 };
 
-export const sendGroupChat = async (chatRoomUID, message) => {
+export const sendGroupChat = async (chatRoomUID: string, message: string) => {
   const uid = auth.currentUser.uid;
   const displayName = auth.currentUser.displayName;
 

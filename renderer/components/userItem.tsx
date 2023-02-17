@@ -20,7 +20,7 @@ const UserItem = ({
   connected,
   roomUsers,
 }: Porps) => {
-  const [viewBtn, setViewBtn] = useState(false);
+  const [viewBtn, setViewBtn] = useState<boolean>(false);
   const router = useRouter();
   const dispatch = useAppDispatch();
 
@@ -42,9 +42,10 @@ const UserItem = ({
     }
   }, []);
 
-  const userClickHandler = () => {
+  const userClickHandler = (): void => {
     setViewBtn(e => !e);
   };
+
   return (
     <div className="w-full h-20 flex">
       <div

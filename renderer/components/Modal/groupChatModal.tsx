@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import { getMyUID } from "../../services/auth";
 import { sendGroupChat, startGroupChatRoom } from "../../services/chat";
@@ -21,17 +21,25 @@ const chatCssProps: React.CSSProperties = {
   paddingLeft: "5px",
 };
 
-const GroupChatModal = ({ exitChatRoom }) => {
-  const [chatInput, setChatInput] = useState("");
-  const [isShiftUsed, setIsShiftUsed] = useState(false);
-  const [chat, setChat] = useState([]);
+interface Props {
+  exitChatRoom: () => void;
+}
+
+interface Chat {
+  displayName: string;
+  message: string;
+  uid: string;
+}
+
+const GroupChatModal = ({ exitChatRoom }: Props) => {
+  const [chatInput, setChatInput] = useState<string>("");
+  const [isShiftUsed, setIsShiftUsed] = useState<boolean>(false);
+  const [chat, setChat] = useState<Chat[]>([]);
 
   const myUID = getMyUID();
   const ref = useRef(window);
   const messageEndRef = useRef(null);
-  const { roomId, displayName, members, lastChatUpdate } = useAppSelector(
-    state => state.group
-  );
+  const { roomId, displayName } = useAppSelector(state => state.group);
 
   useEffect(() => {
     const handledMessageEvent = (e: CustomEvent) => {
@@ -45,7 +53,7 @@ const GroupChatModal = ({ exitChatRoom }) => {
     };
   }, []);
 
-  const sendMessage = e => {
+  const sendMessage = (e): void => {
     e.preventDefault();
 
     if (chatInput === "") return;
@@ -53,10 +61,12 @@ const GroupChatModal = ({ exitChatRoom }) => {
     setChatInput("");
   };
 
-  const keyUpHandler = e => {
+  const keyUpHandler = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
     if (e.key === "Shift") setIsShiftUsed(false);
   };
-  const keyDownHandler = e => {
+  const keyDownHandler = (
+    e: React.KeyboardEvent<HTMLTextAreaElement>
+  ): void => {
     if (e.key === "Shift") setIsShiftUsed(true);
     if (e.key === "Enter") {
       if (e.nativeEvent.isComposing === false && isShiftUsed !== true) {
@@ -66,7 +76,7 @@ const GroupChatModal = ({ exitChatRoom }) => {
     }
   };
 
-  const scroolToBottom = () => {
+  const scroolToBottom = (): void => {
     if (messageEndRef.current === null) return;
     messageEndRef.current.scrollIntoView({ behavior: "smooth" });
   };
@@ -93,7 +103,7 @@ const GroupChatModal = ({ exitChatRoom }) => {
         </div>
         <div className="w-full h-[65%] overflow-y-auto">
           {chat &&
-            chat.map((chatting, index) => {
+            chat.map((chatting: Chat, index: number) => {
               if (index === 0) return;
               if (chatting.uid === myUID) {
                 return (

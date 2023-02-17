@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAppDispatch } from "../../helper/reduxHooks";
-import { RoomUsers } from "../../pages/group";
+import { RoomUsers, Users } from "../../pages/group";
 import { startGroupChat } from "../../services/chat";
 import { getUserOnline } from "../../services/userStatus";
 import { modalActions } from "../../store/reducer/modalSlice";
@@ -13,21 +13,28 @@ interface Item {
   displayName: string;
   connected: boolean;
 }
+
+interface UserList {
+  connected: boolean;
+  displayName: string;
+  uid: string;
+}
+
 const InviteModal = ({ roomUsers }: Props) => {
-  const [filterUsers, setFilterUsers] = useState([]);
-  const [checkedList, setCheckedList] = useState([]);
-  const [isChecked, setIsChecked] = useState(false);
+  const [filterUsers, setFilterUsers] = useState<UserList[]>([]);
+  const [checkedList, setCheckedList] = useState<UserList[]>([]);
+  const [isChecked, setIsChecked] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     const fetchUserData = async () => {
       const roomList = [];
-      roomUsers.map(el => {
+      roomUsers.map((el: Users) => {
         roomList.push(Object.keys(el)[0]);
       });
       const { userList } = await getUserOnline();
-      userList.map(el => {
+      userList.map((el: UserList) => {
         if (!roomList.includes(String(Object.keys(el.uid)))) {
           setFilterUsers(prev => [...prev, el]);
         }
@@ -36,7 +43,7 @@ const InviteModal = ({ roomUsers }: Props) => {
     fetchUserData();
   }, []);
 
-  const checkedItemHandler = (isChecked: boolean, value: Item) => {
+  const checkedItemHandler = (isChecked: boolean, value: Item): void => {
     if (isChecked) {
       setCheckedList(prev => [...prev, value]);
       return;
@@ -48,12 +55,15 @@ const InviteModal = ({ roomUsers }: Props) => {
     return;
   };
 
-  const checkHandler = (e: React.ChangeEvent<HTMLInputElement>, item: Item) => {
+  const checkHandler = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    item: Item
+  ): void => {
     setIsChecked(!isChecked);
     checkedItemHandler(e.target.checked, item);
   };
 
-  const cancellClickHandler = () => {
+  const cancellClickHandler = (): void => {
     dispatch(modalActions.inviteModalClose());
   };
 
@@ -66,7 +76,7 @@ const InviteModal = ({ roomUsers }: Props) => {
     <div className="bg-white absolute top-[50px] right-2 w-32 h-[50%] rounded-[9px] p-3 flex-col justify-between">
       <div className="h-[90%] overflow-y-auto">
         {filterUsers &&
-          filterUsers.map((el, index) => (
+          filterUsers.map((el: Item, index: number) => (
             <div key={index} className="w-full flex mb-4">
               <div>
                 <input type="checkbox" onChange={e => checkHandler(e, el)} />

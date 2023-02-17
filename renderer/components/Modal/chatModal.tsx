@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import { getMyUID } from "../../services/auth";
 import { sendChat, startChatRoom } from "../../services/chat";
@@ -21,17 +21,25 @@ const chatCssProps: React.CSSProperties = {
   paddingLeft: "5px",
 };
 
-const ChatModal = ({ exitChatRoom }) => {
-  const [chatInput, setChatInput] = useState("");
-  const [isShiftUsed, setIsShiftUsed] = useState(false);
-  const [chat, setChat] = useState([]);
+interface Props {
+  exitChatRoom: () => void;
+}
+
+interface Chat {
+  displayName: string;
+  message: string;
+  uid: string;
+}
+
+const ChatModal = ({ exitChatRoom }: Props) => {
+  const [chatInput, setChatInput] = useState<string>("");
+  const [isShiftUsed, setIsShiftUsed] = useState<boolean>(false);
+  const [chat, setChat] = useState<Chat[]>([]);
 
   const myUID = getMyUID();
   const ref = useRef(window);
   const messageEndRef = useRef(null);
-  const { roomId, displayName, roomUsers } = useAppSelector(
-    state => state.chat
-  );
+  const { roomId, displayName } = useAppSelector(state => state.chat);
 
   useEffect(() => {
     const handledMessageEvent = (e: CustomEvent) => {
@@ -45,7 +53,7 @@ const ChatModal = ({ exitChatRoom }) => {
     };
   }, []);
 
-  const sendMessage = e => {
+  const sendMessage = (e): void => {
     e.preventDefault();
 
     if (chatInput === "") return;
@@ -53,10 +61,13 @@ const ChatModal = ({ exitChatRoom }) => {
     setChatInput("");
   };
 
-  const keyUpHandler = e => {
+  const keyUpHandler = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
     if (e.key === "Shift") setIsShiftUsed(false);
   };
-  const keyDownHandler = e => {
+
+  const keyDownHandler = (
+    e: React.KeyboardEvent<HTMLTextAreaElement>
+  ): void => {
     if (e.key === "Shift") setIsShiftUsed(true);
     if (e.key === "Enter") {
       if (e.nativeEvent.isComposing === false && isShiftUsed !== true) {
@@ -66,7 +77,7 @@ const ChatModal = ({ exitChatRoom }) => {
     }
   };
 
-  const scroolToBottom = () => {
+  const scroolToBottom = (): void => {
     if (messageEndRef.current === null) return;
     messageEndRef.current.scrollIntoView({ behavior: "smooth" });
   };
@@ -93,7 +104,7 @@ const ChatModal = ({ exitChatRoom }) => {
         </div>
         <div className="w-full h-[65%] overflow-y-auto">
           {chat &&
-            chat.map((chatting, index) => {
+            chat.map((chatting: Chat, index: number) => {
               if (index === 0) return;
               if (chatting.uid === myUID) {
                 return (

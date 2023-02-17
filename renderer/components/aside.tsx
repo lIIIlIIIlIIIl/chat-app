@@ -8,6 +8,12 @@ const menuArr = [
   { text: "그룹 채팅", title: "group", path: "/group" },
 ];
 
+interface Menu {
+  text: string;
+  title: string;
+  path: string;
+}
+
 const Aside = () => {
   const router = useRouter();
 
@@ -18,7 +24,7 @@ const Aside = () => {
   return (
     <aside className="bg-[#0e0b53] w-1/6 h-full">
       <ul>
-        {menuArr.map((el, idx) => (
+        {menuArr.map((el: Menu, idx: number) => (
           <MenuButton text={el.text} key={idx} path={el.path} />
         ))}
       </ul>

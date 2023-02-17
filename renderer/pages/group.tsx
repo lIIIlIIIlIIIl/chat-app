@@ -9,18 +9,29 @@ import { getUserOnline } from "../services/userStatus";
 import { groupActions } from "../store/reducer/groupSlice";
 import { modalActions } from "../store/reducer/modalSlice";
 
-interface Users {
+export interface Users {
   uid: string;
   displayName: string;
+}
+
+interface Chat {
+  chat: { displayName: string; message: string; uid: string }[];
+  room: string;
+  roomUsers: [];
+  uid?: string;
+  userDisplayName: string[];
+}
+
+interface ChatRoom {
+  roomId: string;
+  uid: string;
 }
 
 export interface RoomUsers extends Array<Users> {}
 
 const Group = () => {
-  const [chatList, setChatList] = useState([]);
+  const [chatList, setChatList] = useState<Chat[]>([]);
   const [roomUsers, setRoomUsers] = useState<RoomUsers>([]);
-  const [roomState, setRoomState] = useState(false);
-  const [roomInfo, setRoomInfo] = useState({});
   const { isVisible } = useAppSelector(state => state.modal);
   const { inviteView } = useAppSelector(state => state.modal);
 
@@ -28,12 +39,12 @@ const Group = () => {
 
   useEffect(() => {
     const fetchChatData = async () => {
-      getGroupChatRooms().then(res => {
+      getGroupChatRooms().then((res: ChatRoom[]) => {
         let roomId = res.filter(el => el.roomId.includes("groupchat"));
         roomId.map(async el => {
-          await getGroupChatInfos(el.uid).then(res => {
+          await getGroupChatInfos(el.uid).then((res: Chat) => {
             Object.assign(res, { uid: el.uid });
-            setChatList(prev => [...prev, res]);
+            setChatList((prev: Chat[]) => [...prev, res]);
           });
         });
       });
@@ -41,7 +52,7 @@ const Group = () => {
     fetchChatData();
   }, []);
 
-  const exitChatRoom = () => {
+  const exitChatRoom = (): void => {
     dispatch(modalActions.closeModal());
     dispatch(groupActions.endGroupInfo());
   };
@@ -70,7 +81,7 @@ const Group = () => {
             </button>
           </div>
           <ul className="w-full h-[90%] pl-5 bg-[#F0F2F5]">
-            {chatList.map((el, idx) => (
+            {chatList.map((el: Chat, idx: number) => (
               <GroupItem
                 key={idx}
                 roomName={el.room}

@@ -8,8 +8,15 @@ import { chatActions } from "../store/reducer/chatSlice";
 import PersonalItem from "../components/personalItem";
 import { useRouter } from "next/router";
 
+interface Chat {
+  chat: { displayName: string; message: string; uid: string }[];
+  uid?: string;
+  user: string;
+  roomUsers?: [];
+}
+
 const Personal = () => {
-  const [chatList, setChatList] = useState([]);
+  const [chatList, setChatList] = useState<Chat[]>([]);
   const { isVisible } = useAppSelector(state => state.modal);
 
   const router = useRouter();
@@ -19,17 +26,16 @@ const Personal = () => {
     const fetchChatData = async () => {
       const data = await getChatRooms();
       data.forEach(async el => {
-        // el.uid는 랜덤 채팅이름
-        await getChatInfos(el.uid).then(res => {
+        await getChatInfos(el.uid).then((res: Chat) => {
           Object.assign(res, { uid: el.uid });
-          setChatList(prev => [...prev, res]);
+          setChatList((prev: Chat[]) => [...prev, res]);
         });
       });
     };
     fetchChatData();
   }, []);
 
-  const exitChatRoom = () => {
+  const exitChatRoom = (): void => {
     dispatch(modalActions.closeModal());
     dispatch(chatActions.chatClose());
     router.push("/personal");
@@ -43,7 +49,7 @@ const Personal = () => {
       {!isVisible && (
         <ul className="w-full h-full pl-5 bg-[#F0F2F5] overflow-y-auto">
           {chatList &&
-            chatList.map((el, idx) => (
+            chatList.map((el: Chat, idx: number) => (
               <PersonalItem
                 key={idx}
                 nickname={Object.values(el.user)[0]}

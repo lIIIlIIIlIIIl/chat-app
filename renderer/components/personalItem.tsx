@@ -12,7 +12,7 @@ interface Porps {
 const PersonalItem = ({ nickname, message, audienceUid, roomUsers }: Porps) => {
   const dispatch = useAppDispatch();
 
-  const startGroupChatWith = () => {
+  const startGroupChatWith = (): void => {
     dispatch(
       chatActions.chatOpen({
         roomId: audienceUid,

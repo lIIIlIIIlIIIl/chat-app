@@ -4,11 +4,11 @@ import { signupFuc, userProfileFuc } from "../services/auth";
 import { signupDB } from "../services/database";
 
 const Signup = () => {
-  const [email, setEmail] = useState("");
-  const [nickname, setNickname] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirm, setPasswordConfirm] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
+  const [email, setEmail] = useState<string>("");
+  const [nickname, setNickname] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [passwordConfirm, setPasswordConfirm] = useState<string>("");
+  const [errorMsg, setErrorMsg] = useState<string>("");
 
   const router = useRouter();
 

@@ -1,7 +1,13 @@
 import { ref, onValue, push, child, update } from "firebase/database";
 import { database } from "./firebase";
 
-export const sendChat = data => {
+interface Data {
+  message: string;
+  timestamp: string;
+  userId: string;
+}
+
+export const sendChat = (data: Data) => {
   const postData = {
     message: data.message,
     timestamp: data.timestamp,
