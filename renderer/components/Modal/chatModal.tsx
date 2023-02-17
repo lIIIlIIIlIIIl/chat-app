@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { getMyUID } from "../../services/auth";
 import { sendChat, startChatRoom } from "../../services/chat";
-import { useAppDispatch, useAppSelector } from "../../helper/reduxHooks";
+import { useAppSelector } from "../../helper/reduxHooks";
 
 const myChatCssProps: React.CSSProperties = {
   width: "100%",
@@ -26,7 +26,6 @@ const ChatModal = ({ exitChatRoom }) => {
   const [isShiftUsed, setIsShiftUsed] = useState(false);
   const [chat, setChat] = useState([]);
 
-  const dispatch = useAppDispatch();
   const myUID = getMyUID();
   const ref = useRef(window);
   const messageEndRef = useRef(null);

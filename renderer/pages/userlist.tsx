@@ -1,10 +1,6 @@
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Aside from "../components/aside";
-import FindUser from "../components/findUser";
 import UserItem from "../components/userItem";
-import { getUserList } from "../services/database";
-import { auth } from "../services/firebase";
 import { getUserOnline } from "../services/userStatus";
 
 const UserList = () => {

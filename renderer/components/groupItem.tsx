@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useAppDispatch } from "../helper/reduxHooks";
-import { chatActions } from "../store/reducer/chatSlice";
 import { groupActions } from "../store/reducer/groupSlice";
 import { modalActions } from "../store/reducer/modalSlice";
 

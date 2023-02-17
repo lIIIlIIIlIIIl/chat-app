@@ -1,9 +1,7 @@
 import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
-import { makeDate } from "../helper/helperFuc";
 import { useAppDispatch } from "../helper/reduxHooks";
 import { startChat } from "../services/chat";
-import { auth } from "../services/firebase";
 import { chatActions } from "../store/reducer/chatSlice";
 import { modalActions } from "../store/reducer/modalSlice";
 

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { getMyUID } from "../../services/auth";
 import { sendGroupChat, startGroupChatRoom } from "../../services/chat";
-import { useAppDispatch, useAppSelector } from "../../helper/reduxHooks";
+import { useAppSelector } from "../../helper/reduxHooks";
 
 const myChatCssProps: React.CSSProperties = {
   width: "100%",

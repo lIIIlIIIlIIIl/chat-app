@@ -1,5 +1,4 @@
 import Aside from "../components/aside";
-import UserItem from "../components/userItem";
 import { useAppDispatch, useAppSelector } from "../helper/reduxHooks";
 import ChatModal from "../components/Modal/chatModal";
 import { useEffect, useState } from "react";

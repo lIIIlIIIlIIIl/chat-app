@@ -1,4 +1,4 @@
-import { push, set, ref, get, onValue } from "@firebase/database";
+import { set, ref, get, onValue } from "@firebase/database";
 import { auth, database } from "./firebase";
 
 interface ChattingList {

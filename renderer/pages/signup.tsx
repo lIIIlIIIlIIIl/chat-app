@@ -1,9 +1,7 @@
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { signupFuc, userProfileFuc } from "../services/auth";
 import { signupDB } from "../services/database";
-import { auth } from "../services/firebase";
 
 const Signup = () => {
   const [email, setEmail] = useState("");

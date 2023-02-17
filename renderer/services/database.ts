@@ -1,13 +1,4 @@
-import {
-  ref,
-  set,
-  onValue,
-  push,
-  child,
-  update,
-  get,
-  getDatabase,
-} from "firebase/database";
+import { ref, onValue, push, child, update } from "firebase/database";
 import { database } from "./firebase";
 
 export const sendChat = data => {

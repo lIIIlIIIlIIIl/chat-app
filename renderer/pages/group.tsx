@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
 import Aside from "../components/aside";
 import GroupItem from "../components/groupItem";
-import ChatModal from "../components/Modal/chatModal";
 import GroupChatModal from "../components/Modal/groupChatModal";
 import InviteModal from "../components/Modal/inviteModal";
-import UserItem from "../components/userItem";
 import { useAppDispatch, useAppSelector } from "../helper/reduxHooks";
 import { getGroupChatInfos, getGroupChatRooms } from "../services/chat";
 import { getUserOnline } from "../services/userStatus";

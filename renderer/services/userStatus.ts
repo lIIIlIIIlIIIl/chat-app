@@ -1,16 +1,10 @@
 import {
-  push,
   ref,
   set,
   serverTimestamp,
-  limitToLast,
   onValue,
   onDisconnect,
   get,
-  orderByValue,
-  query,
-  equalTo,
-  remove,
 } from "@firebase/database";
 import { auth, database } from "./firebase";
 
