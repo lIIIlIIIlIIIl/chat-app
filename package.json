@@ -10,6 +10,7 @@
     "dev": "nextron",
     "build": "nextron build",
     "build:mac": "nextron build --mac --x64",
+    "build:win64": "electron-builder --win nsis:x64",
     "postinstall": "electron-builder install-app-deps"
   },
   "build": {
