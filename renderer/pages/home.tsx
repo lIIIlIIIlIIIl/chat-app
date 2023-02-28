@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import LoginInput from "../components/Login/loginInput";
+import CompoOfInput from "../components/Input/compoOfInput";
 import { signInWithEmail } from "../services/auth";
 import { onUserConnect } from "../services/userStatus";
 
@@ -51,26 +51,16 @@ const Home = () => {
           className="flex flex-col justify-between"
           onSubmit={onSubmitHandler}
         >
-          <div className="w-full mb-5">
-            <input
-              placeholder="이메일을 입력해주세요."
-              className="border py-2 px-2 text-grey-darkest w-full h-full"
-              type="email"
-              onChange={e => {
-                setEmail(e.target.value);
-              }}
-            />
-          </div>
-          <div className="w-full mb-5">
-            <input
-              placeholder="비밀번호를 입력해주세요."
-              className="border py-2 px-2 text-grey-darkest w-full"
-              type="password"
-              onChange={e => {
-                setPassword(e.target.value);
-              }}
-            />
-          </div>
+          <CompoOfInput
+            placeholder="이메일을 입력해주세요."
+            setChange={setEmail}
+          />
+          <CompoOfInput
+            placeholder="비밀번호를 입력해주세요."
+            type="password"
+            setChange={setPassword}
+          />
+
           <div className="w-full mb-5">
             <span className="text-[red]">{erroMes}</span>
           </div>
