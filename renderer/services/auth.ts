@@ -15,15 +15,7 @@ export const signInWithEmail = async (email: string, password: string) => {
     const response = await signInWithEmailAndPassword(auth, email, password);
     return response;
   } catch (error) {
-    switch (error.code) {
-      case "auth/wrong-password":
-        alert("비밀번호가 틀렸습니다.");
-        break;
-      case "auth/user-not-found":
-        alert("이메일 혹은 비밀번호를 확인해주세요.");
-        break;
-    }
-    return error;
+    return error.code;
   }
 };
 
