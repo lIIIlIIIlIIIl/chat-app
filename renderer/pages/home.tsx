@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { validateEmail } from "../assets/InputCheck";
 import CompoOfInput from "../components/Input/compoOfInput";
 import { signInWithEmail } from "../services/auth";
 import { onUserConnect } from "../services/userStatus";
@@ -19,8 +20,13 @@ const Home = () => {
     if (password === "") return setErroMsg("비밀번호를 입력해주세요.");
 
     if (email !== "" && password !== "") {
+      if (!validateEmail(email))
+        return setErroMsg("이메일 주소가 올바르지 않습니다.");
+
+      if (password.length < 5 || password.length > 20)
+        return setErroMsg("비밀번호는 5~20자 입력해야합니다.");
+
       const result = await signInWithEmail(email, password);
-      console.log(result);
       switch (result) {
         case "auth/user-not-found":
           setErroMsg("이메일을 확인해주세요.");
