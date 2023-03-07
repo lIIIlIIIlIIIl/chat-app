@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 import { validateEmail, validateNickname } from "../assets/InputCheck";
 import CompoOfInput from "../components/Input/compoOfInput";
 import { signupFuc, userProfileFuc } from "../services/auth";
-import { signupDB } from "../services/database";
+import { searchData, usersInfoDB } from "../services/database";
 
 const Signup = () => {
   const [email, setEmail] = useState<string>("");
@@ -46,7 +46,8 @@ const Signup = () => {
       try {
         await signupFuc(email, password).then(() => {
           userProfileFuc(nickname);
-          signupDB(email, nickname);
+          usersInfoDB(email, nickname);
+          searchData(nickname);
           router.push("/home");
           setEmail("");
           setPassword("");

@@ -14,16 +14,15 @@ interface UserList {
   connected: boolean;
 }
 
+// 로그인시 users에 저장됨
 export const onUserConnect = () => {
   const uid = auth.currentUser.uid;
   const myConnectionsRef = ref(database, `users/${uid}/connected`);
-  const myDisplayNameRef = ref(database, `users/${uid}/displayName`);
   const lastOnlineRef = ref(database, `users/${uid}/lastOnline`);
   const connectedRef = ref(database, ".info/connected");
   onValue(connectedRef, snap => {
     if (snap.val() === true) {
       set(myConnectionsRef, true);
-      set(myDisplayNameRef, auth.currentUser.displayName);
       onDisconnect(myConnectionsRef).remove();
 
       onDisconnect(lastOnlineRef).set(serverTimestamp());
@@ -49,6 +48,30 @@ export const getUserOnline = async () => {
       }
     });
     return { userList };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getSearchUserList = async (displayName: string) => {
+  const uid = auth.currentUser.uid;
+  const connectedRef = ref(database, "searchUsers");
+  try {
+    let userList: UserList[] = [];
+    const response = await get(connectedRef);
+    const users = Object.keys(response.val());
+    users.forEach(user => {
+      if (user === displayName) {
+        let findUser = {
+          uid: String(response.val()[user].uid),
+          displayName: user,
+          connected: response.val()[user].connected,
+        };
+        userList.push(findUser);
+      }
+    });
+
+    return userList.length !== 0 ? userList[0] : "no data";
   } catch (error) {
     console.log(error);
   }
