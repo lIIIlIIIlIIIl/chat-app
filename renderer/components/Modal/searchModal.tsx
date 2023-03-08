@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { getSearchUserList } from "../../services/userStatus";
-
-interface Props {
-  searchModalOnClickHandler: () => void;
-  isModalOpen: boolean;
-}
+import {
+  getSearchUserList,
+  userAddToMyUserList,
+} from "../../services/userStatus";
 
 interface UserInfo {
-  uid: string;
+  opponentUid: string;
   displayName: string;
   connected: boolean;
 }
@@ -17,10 +15,11 @@ export default function SearchModal({
   isModalOpen,
 }) {
   const [findUser, setFindUser] = useState<UserInfo | "no data">(null);
-  const [isFind, setIsFind] = useState<boolean>(false);
+  const [isClicked, setIsClicked] = useState<boolean>(false);
 
   useEffect(() => {
     setFindUser(null);
+    setIsClicked(false);
   }, [isModalOpen]);
 
   const searchButtonClickHandler = async (
@@ -37,7 +36,13 @@ export default function SearchModal({
     setFindUser(userInfo);
   };
 
-  console.log(findUser);
+  const addButtonHandler = () => {
+    if (!findUser) return;
+
+    if (findUser === "no data") return;
+
+    userAddToMyUserList(findUser);
+  };
 
   return (
     <div className="w-full h-full bg-gray-900 bg-opacity-70 flex justify-center items-center absolute z-20 ">
@@ -62,8 +67,12 @@ export default function SearchModal({
               name="displayName"
             />
           </div>
-          <div className="h-full w-[15%] bg-blue-400 flex justify-center rounded-xl text-white">
-            <input type="submit" value="검색" className="h-full w-full " />
+          <div className="h-full w-[15%] bg-blue-400 flex justify-center rounded-xl text-white ">
+            <input
+              type="submit"
+              value="검색"
+              className="h-full w-full cursor-pointer"
+            />
           </div>
         </form>
         <div className="w-full h-[70%] flex item-center">
@@ -76,28 +85,35 @@ export default function SearchModal({
                   </li>
                 ) : (
                   <li className="w-full h-20 flex">
-                    <div className="w-[85%] h-full flex pt-1 pb-1 cursor-pointer">
-                      <div className="w-12 h-12 flex items-center justify-center p-2 border-2 border-[#facc15] rounded-full">
-                        <span className="text-center text-xs">사진</span>
+                    <div
+                      className="w-[85%] h-full flex items-center pt-1 pb-1 cursor-pointer"
+                      onClick={() => setIsClicked(prev => !prev)}
+                    >
+                      <div className="">
+                        <div className="flex items-center justify-center w-12 h-12 p-2 border-2 border-[#facc15] rounded-full">
+                          <span className="text-center text-xs">사진</span>
+                        </div>
                       </div>
-                      <div className="h-full w-full">
-                        <div className="pl-2 pt-3 pb-0.5 ">
+                      <div className="flex justify-start items-center h-full w-full pl-3">
+                        <div>
                           <span>{findUser.displayName}</span>
+                        </div>
+                        <div>
                           <span className="text-[12px] pl-2">
                             {findUser.connected ? "(온라인)" : "(오프라인)"}
                           </span>
                         </div>
                       </div>
                     </div>
-                    <div className="w-[12%] h-full flex justify-center items-center pt-2 pb-2 pl-1 pr-1 ">
-                      {/* {viewBtn && (
-                      <button
-                        className="h-full w-full bg-[#3b82f6] rounded-md text-white p-2 text-[12px]"
-                        onClick={startChatWith}
-                      >
-                        채팅하기
-                      </button>
-                    )} */}
+                    <div className="w-[15%] h-full flex justify-center items-center pt-2 pb-2 pl-1 pr-1">
+                      {isClicked && (
+                        <button
+                          className="w-full h-[60%] bg-[#3b82f6] rounded-md text-white p-2 text-[12px]"
+                          onClick={addButtonHandler}
+                        >
+                          추가
+                        </button>
+                      )}
                     </div>
                   </li>
                 )}

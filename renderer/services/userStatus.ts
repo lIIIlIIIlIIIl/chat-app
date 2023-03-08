@@ -9,22 +9,42 @@ import {
 import { auth, database } from "./firebase";
 
 interface UserList {
-  uid: string;
+  opponentUid: string;
   displayName: string;
   connected: boolean;
+}
+
+interface AddUserInfo {
+  opponentUid: string;
+  displayName: string;
 }
 
 // 로그인시 users에 저장됨
 export const onUserConnect = () => {
   const uid = auth.currentUser.uid;
+  const displayName = auth.currentUser.displayName;
+
+  // allUsers
   const myConnectionsRef = ref(database, `users/${uid}/connected`);
   const lastOnlineRef = ref(database, `users/${uid}/lastOnline`);
+
+  // searchUsers
+  const searchUserConnectionsRef = ref(
+    database,
+    `searchUsers/${displayName}/connected`
+  );
+  const searchUserUidRef = ref(database, `searchUsers/${displayName}/uid`);
   const connectedRef = ref(database, ".info/connected");
+
   onValue(connectedRef, snap => {
     if (snap.val() === true) {
       set(myConnectionsRef, true);
-      onDisconnect(myConnectionsRef).remove();
 
+      set(searchUserConnectionsRef, true);
+      set(searchUserUidRef, uid);
+
+      onDisconnect(myConnectionsRef).remove();
+      onDisconnect(searchUserConnectionsRef).remove();
       onDisconnect(lastOnlineRef).set(serverTimestamp());
     }
   });
@@ -41,7 +61,7 @@ export const getUserOnline = async () => {
     users.forEach(user => {
       if (user !== uid) {
         userList.push({
-          uid: user,
+          opponentUid: user,
           displayName: response.val()[user].displayName,
           connected: response.val()[user].connected,
         });
@@ -53,8 +73,8 @@ export const getUserOnline = async () => {
   }
 };
 
+// 유저 검색하기
 export const getSearchUserList = async (displayName: string) => {
-  const uid = auth.currentUser.uid;
   const connectedRef = ref(database, "searchUsers");
   try {
     let userList: UserList[] = [];
@@ -63,7 +83,7 @@ export const getSearchUserList = async (displayName: string) => {
     users.forEach(user => {
       if (user === displayName) {
         let findUser = {
-          uid: String(response.val()[user].uid),
+          opponentUid: String(response.val()[user].uid),
           displayName: user,
           connected: response.val()[user].connected,
         };
@@ -75,4 +95,12 @@ export const getSearchUserList = async (displayName: string) => {
   } catch (error) {
     console.log(error);
   }
+};
+
+// 내 유저 목록에 추가하기
+export const userAddToMyUserList = (props: UserList) => {
+  const uid = auth.currentUser.uid;
+  const oppenentUidRef = ref(database, `userList/${uid}/${props.opponentUid}`);
+
+  set(oppenentUidRef, { displayName: props.displayName });
 };

@@ -39,11 +39,18 @@ export const signInWithGoogle = async () => {
 
 export const logoutFuc = async () => {
   const uid = auth.currentUser.uid;
+  const displayName = auth.currentUser.displayName;
   const myConnectionsRef = ref(database, `users/${uid}/connected`);
+
+  const searchUserConnectionsRef = ref(
+    database,
+    `searchUsers/${displayName}/connected`
+  );
 
   try {
     signOut(auth);
     set(myConnectionsRef, false);
+    set(searchUserConnectionsRef, false);
   } catch (error) {
     console.log(error);
   }

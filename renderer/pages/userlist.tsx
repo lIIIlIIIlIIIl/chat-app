@@ -7,7 +7,7 @@ import { getUserOnline } from "../services/userStatus";
 interface Users {
   connected: boolean | undefined;
   displayName: string;
-  uid: string;
+  opponentUid: string;
 }
 
 const UserList = () => {
@@ -49,7 +49,7 @@ const UserList = () => {
               <UserItem
                 key={idx}
                 nickname={el.displayName}
-                audienceUid={el.uid}
+                audienceUid={el.opponentUid}
                 connected={el.connected}
               />
             ))}
