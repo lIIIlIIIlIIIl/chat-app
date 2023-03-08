@@ -9,17 +9,10 @@ interface Porps {
   nickname: any;
   audienceUid: string;
   message?: string;
-  connected?: boolean;
   roomUsers?: [];
 }
 
-const UserItem = ({
-  nickname,
-  audienceUid,
-  message,
-  connected,
-  roomUsers,
-}: Porps) => {
+const UserItem = ({ nickname, audienceUid, message, roomUsers }: Porps) => {
   const [viewBtn, setViewBtn] = useState<boolean>(false);
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -60,9 +53,6 @@ const UserItem = ({
         <div className="h-full w-full">
           <div className="pl-2 pt-3 pb-0.5 ">
             <span>{nickname}</span>
-            <span className="text-[12px] pl-2">
-              {connected ? "(온라인)" : "(오프라인)"}
-            </span>
           </div>
           <div className="pl-2 pt-0.5 pb-3 text-[#a8a29e]">{message}</div>
         </div>

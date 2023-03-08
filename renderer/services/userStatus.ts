@@ -14,7 +14,7 @@ interface UserList {
   connected: boolean;
 }
 
-interface AddUserInfo {
+interface UserInfo {
   opponentUid: string;
   displayName: string;
 }
@@ -83,7 +83,7 @@ export const getSearchUserList = async (displayName: string) => {
     users.forEach(user => {
       if (user === displayName) {
         let findUser = {
-          opponentUid: String(response.val()[user].uid),
+          opponentUid: response.val()[user].uid as string,
           displayName: user,
           connected: response.val()[user].connected,
         };
@@ -100,7 +100,30 @@ export const getSearchUserList = async (displayName: string) => {
 // 내 유저 목록에 추가하기
 export const userAddToMyUserList = (props: UserList) => {
   const uid = auth.currentUser.uid;
-  const oppenentUidRef = ref(database, `userList/${uid}/${props.opponentUid}`);
+  const opponentUidRef = ref(database, `userList/${uid}/${props.opponentUid}`);
 
-  set(oppenentUidRef, { displayName: props.displayName });
+  set(opponentUidRef, { displayName: props.displayName });
+};
+
+// 내 유저 목록 불러오기
+export const getMyUserList = async () => {
+  const uid = auth.currentUser.uid;
+  const myUserList = ref(database, `userList/${uid}`);
+
+  try {
+    const userList: UserInfo[] = [];
+    const response = await (await get(myUserList)).val();
+    const users = Object.keys(response);
+    users.forEach(user => {
+      let findUser = {
+        opponentUid: user,
+        displayName: response[user].displayName as string,
+      };
+      userList.push(findUser);
+    });
+
+    return { userList };
+  } catch (error) {
+    console.log(error);
+  }
 };

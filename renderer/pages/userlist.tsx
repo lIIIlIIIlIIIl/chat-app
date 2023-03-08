@@ -2,25 +2,24 @@ import { useEffect, useState } from "react";
 import Aside from "../components/aside";
 import SearchModal from "../components/Modal/searchModal";
 import UserItem from "../components/userItem";
-import { getUserOnline } from "../services/userStatus";
+import { getMyUserList, getUserOnline } from "../services/userStatus";
 
-interface Users {
-  connected: boolean | undefined;
-  displayName: string;
+interface UserList {
   opponentUid: string;
+  displayName: string;
 }
 
 const UserList = () => {
-  const [userList, setuserList] = useState<Users[]>([]);
+  const [userList, setuserList] = useState<UserList[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const { userList } = await getUserOnline();
+      const { userList } = await getMyUserList();
       setuserList(userList);
     };
     fetchUserData();
-  }, []);
+  }, [isModalOpen]);
 
   const searchModalOnClickHandler = () => {
     setIsModalOpen(prev => !prev);
@@ -45,12 +44,11 @@ const UserList = () => {
         </div>
         <ul className="w-full h-full pl-5 overflow-y-auto">
           {userList &&
-            userList.map((el: Users, idx: number) => (
+            userList.map((el: UserList, idx: number) => (
               <UserItem
                 key={idx}
                 nickname={el.displayName}
                 audienceUid={el.opponentUid}
-                connected={el.connected}
               />
             ))}
         </ul>
