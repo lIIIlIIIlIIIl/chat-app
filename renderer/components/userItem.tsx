@@ -55,19 +55,21 @@ const UserItem = ({
   return (
     <li className="w-full h-20 flex">
       <div
-        className="w-full h-full flex pt-1 pb-1 cursor-pointer"
+        className="w-full h-full flex items-center  pt-1 pb-1 cursor-pointer"
         onClick={userClickHandler}
       >
-        <div className="h-full flex items-center p-2">
-          <div className="rounded-full w-12 h-12 text-center border-2 border-[#facc15]">
-            U
+        <div>
+          <div className="flex items-center justify-center w-12 h-12 p-2 border-2 border-[#facc15] rounded-full">
+            <span className="text-center text-xs">사진</span>
           </div>
         </div>
-        <div className="h-full w-full">
-          <div className="pl-2 pt-3 pb-0.5 ">
+        <div className="flex justify-start items-center h-full w-full pl-3">
+          <div>
             <span>{nickname}</span>
           </div>
-          <div className="pl-2 pt-0.5 pb-3 text-[#a8a29e]">{message}</div>
+          {message ? (
+            <div className="pl-2 pt-1 pb-3 text-[#a8a29e]">{message}</div>
+          ) : null}
         </div>
         <div className="w-[30%] h-full flex justify-between items-center">
           {viewBtn && (

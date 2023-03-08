@@ -90,7 +90,7 @@ export default function SearchModal({
                       className="w-[85%] h-full flex items-center pt-1 pb-1 cursor-pointer"
                       onClick={() => setIsClicked(prev => !prev)}
                     >
-                      <div className="">
+                      <div>
                         <div className="flex items-center justify-center w-12 h-12 p-2 border-2 border-[#facc15] rounded-full">
                           <span className="text-center text-xs">사진</span>
                         </div>
