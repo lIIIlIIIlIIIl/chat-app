@@ -42,6 +42,7 @@ export default function SearchModal({
     if (findUser === "no data") return;
 
     userAddToMyUserList(findUser);
+    searchModalOnClickHandler();
   };
 
   return (
