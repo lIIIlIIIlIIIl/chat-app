@@ -15,8 +15,11 @@ const UserList = () => {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const { userList } = await getMyUserList();
-      setuserList(userList);
+      const response = await getMyUserList();
+
+      if (!response) return;
+
+      setuserList(response.userList);
     };
     fetchUserData();
   }, [isModalOpen]);
@@ -50,17 +53,23 @@ const UserList = () => {
             친구 추가
           </button>
         </div>
-        <ul className="w-full h-full pl-5 pr-5 overflow-y-auto">
-          {userList &&
-            userList.map((el: UserList, idx: number) => (
-              <UserItem
-                key={idx}
-                nickname={el.displayName}
-                audienceUid={el.opponentUid}
-                deleteUserFormUserList={deleteUserFormUserList}
-              />
-            ))}
-        </ul>
+        {userList.length === 0 ? (
+          <div className="w-full h-[10%] p-5">
+            <span>등록된 유저가 없습니다.</span>
+          </div>
+        ) : (
+          <ul className="w-full h-full pl-5 pr-5 overflow-y-auto">
+            {userList &&
+              userList.map((el: UserList, idx: number) => (
+                <UserItem
+                  key={idx}
+                  nickname={el.displayName}
+                  audienceUid={el.opponentUid}
+                  deleteUserFormUserList={deleteUserFormUserList}
+                />
+              ))}
+          </ul>
+        )}
       </div>
     </div>
   );
