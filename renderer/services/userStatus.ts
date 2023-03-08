@@ -5,6 +5,7 @@ import {
   onValue,
   onDisconnect,
   get,
+  remove,
 } from "@firebase/database";
 import { auth, database } from "./firebase";
 
@@ -50,28 +51,28 @@ export const onUserConnect = () => {
   });
 };
 
-export const getUserOnline = async () => {
-  const uid = auth.currentUser.uid;
-  const connectedRef = ref(database, "users");
-  try {
-    let userList: UserList[] = [];
+// export const getUserOnline = async () => {
+//   const uid = auth.currentUser.uid;
+//   const connectedRef = ref(database, "users");
+//   try {
+//     let userList: UserList[] = [];
 
-    const response = await get(connectedRef);
-    const users = Object.keys(response.val());
-    users.forEach(user => {
-      if (user !== uid) {
-        userList.push({
-          opponentUid: user,
-          displayName: response.val()[user].displayName,
-          connected: response.val()[user].connected,
-        });
-      }
-    });
-    return { userList };
-  } catch (error) {
-    console.log(error);
-  }
-};
+//     const response = await get(connectedRef);
+//     const users = Object.keys(response.val());
+//     users.forEach(user => {
+//       if (user !== uid) {
+//         userList.push({
+//           opponentUid: user,
+//           displayName: response.val()[user].displayName,
+//           connected: response.val()[user].connected,
+//         });
+//       }
+//     });
+//     return { userList };
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
 
 // 유저 검색하기
 export const getSearchUserList = async (displayName: string) => {
@@ -126,4 +127,11 @@ export const getMyUserList = async () => {
   } catch (error) {
     console.log(error);
   }
+};
+
+export const deleteMyUserList = (opponentUid: string) => {
+  const uid = auth.currentUser.uid;
+  const opponent = ref(database, `userList/${uid}/${opponentUid}`);
+
+  remove(opponent);
 };

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Aside from "../components/aside";
 import SearchModal from "../components/Modal/searchModal";
 import UserItem from "../components/userItem";
-import { getMyUserList, getUserOnline } from "../services/userStatus";
+import { getMyUserList } from "../services/userStatus";
 
 interface UserList {
   opponentUid: string;
@@ -24,6 +24,14 @@ const UserList = () => {
   const searchModalOnClickHandler = () => {
     setIsModalOpen(prev => !prev);
   };
+
+  const deleteUserFormUserList = (opponentUid: string) => {
+    const fileterUserList = userList.filter(
+      (user: UserList) => user.opponentUid !== opponentUid
+    );
+    setuserList(fileterUserList);
+  };
+
   return (
     <div className="w-screen h-screen flex">
       <Aside />
@@ -42,13 +50,14 @@ const UserList = () => {
             친구 추가
           </button>
         </div>
-        <ul className="w-full h-full pl-5 overflow-y-auto">
+        <ul className="w-full h-full pl-5 pr-5 overflow-y-auto">
           {userList &&
             userList.map((el: UserList, idx: number) => (
               <UserItem
                 key={idx}
                 nickname={el.displayName}
                 audienceUid={el.opponentUid}
+                deleteUserFormUserList={deleteUserFormUserList}
               />
             ))}
         </ul>
