@@ -5,7 +5,7 @@ import GroupChatModal from "../components/Modal/groupChatModal";
 import InviteModal from "../components/Modal/inviteModal";
 import { useAppDispatch, useAppSelector } from "../helper/reduxHooks";
 import { getGroupChatInfos, getGroupChatRooms } from "../services/chat";
-import { getUserOnline } from "../services/userStatus";
+import { getMyUserList } from "../services/userStatus";
 import { groupActions } from "../store/reducer/groupSlice";
 import { modalActions } from "../store/reducer/modalSlice";
 
@@ -27,11 +27,18 @@ interface ChatRoom {
   uid: string;
 }
 
+interface UserInfo {
+  opponentUid: string;
+  displayName: string;
+}
+
 export interface RoomUsers extends Array<Users> {}
 
 const Group = () => {
   const [chatList, setChatList] = useState<Chat[]>([]);
   const [roomUsers, setRoomUsers] = useState<RoomUsers>([]);
+  const [users, setUsers] = useState<UserInfo[]>([]);
+
   const { isVisible } = useAppSelector(state => state.modal);
   const { inviteView } = useAppSelector(state => state.modal);
 
@@ -49,6 +56,16 @@ const Group = () => {
         });
       });
     };
+
+    const fetchUserData = async () => {
+      const response = await getMyUserList();
+
+      if (!response) return;
+
+      setUsers(response.userList);
+    };
+
+    fetchUserData();
     fetchChatData();
   }, []);
 
@@ -58,8 +75,8 @@ const Group = () => {
   };
 
   const btnHandler = async () => {
-    const { userList } = await getUserOnline();
-    setRoomUsers(userList);
+    // const { userList } = await getUserOnline();
+    // setRoomUsers(userList);
   };
 
   return (
@@ -68,8 +85,8 @@ const Group = () => {
       {isVisible && <GroupChatModal exitChatRoom={exitChatRoom} />}
 
       {!isVisible && (
-        <div className="w-full h-full bg-[#F0F2F5] relative">
-          {inviteView && <InviteModal roomUsers={roomUsers} />}
+        <div className="w-full h-full bg-[rgb(240,242,245)] relative">
+          {inviteView && <InviteModal users={users} />}
 
           <div className="w-full h-[10%] flex justify-end pr-5">
             <button

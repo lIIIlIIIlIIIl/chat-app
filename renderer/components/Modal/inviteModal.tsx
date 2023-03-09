@@ -1,66 +1,41 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useAppDispatch } from "../../helper/reduxHooks";
 import { RoomUsers, Users } from "../../pages/group";
 import { startGroupChat } from "../../services/chat";
-import { getUserOnline } from "../../services/userStatus";
 import { modalActions } from "../../store/reducer/modalSlice";
 
 interface Props {
-  roomUsers: RoomUsers;
-}
-interface Item {
-  uid: string;
-  displayName: string;
-  connected: boolean;
+  users: UserInfo[];
 }
 
-interface UserList {
-  connected: boolean;
+interface UserInfo {
+  opponentUid: string;
   displayName: string;
-  uid: string;
 }
 
-const InviteModal = ({ roomUsers }: Props) => {
-  const [filterUsers, setFilterUsers] = useState<UserList[]>([]);
-  const [checkedList, setCheckedList] = useState<UserList[]>([]);
+const InviteModal = ({ users }: Props) => {
+  const [checkedList, setCheckedList] = useState<UserInfo[]>([]);
   const [isChecked, setIsChecked] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const roomList = [];
-      roomUsers.map((el: Users) => {
-        roomList.push(Object.keys(el)[0]);
-      });
-      const { userList } = await getUserOnline();
-      userList.map((el: UserList) => {
-        if (!roomList.includes(String(Object.keys(el.uid)))) {
-          setFilterUsers(prev => [...prev, el]);
-        }
-      });
-    };
-    fetchUserData();
-  }, []);
-
-  const checkedItemHandler = (isChecked: boolean, value: Item): void => {
+  const checkedItemHandler = (isChecked: boolean, user: UserInfo): void => {
     if (isChecked) {
-      setCheckedList(prev => [...prev, value]);
+      setCheckedList(prev => [...prev, user]);
       return;
     }
-    if (!isChecked && checkedList.includes(value)) {
-      setCheckedList(checkedList.filter(el => el !== value));
+    if (!isChecked && checkedList.includes(user)) {
+      setCheckedList(checkedList.filter(el => el !== user));
       return;
     }
-    return;
   };
 
   const checkHandler = (
     e: React.ChangeEvent<HTMLInputElement>,
-    item: Item
+    user: UserInfo
   ): void => {
     setIsChecked(!isChecked);
-    checkedItemHandler(e.target.checked, item);
+    checkedItemHandler(e.target.checked, user);
   };
 
   const cancellClickHandler = (): void => {
@@ -68,34 +43,52 @@ const InviteModal = ({ roomUsers }: Props) => {
   };
 
   const inviteClickHandler = async () => {
-    startGroupChat(checkedList);
+    console.log(checkedList);
+    // startGroupChat(checkedList);
     dispatch(modalActions.inviteModalClose());
   };
 
+  if (users.length === 0) {
+    return (
+      <div className="bg-white absolute top-[50px] right-2 w-56 h-[50%] rounded-[9px] p-3">
+        <div className="h-[90%] flex justify-center items-center">
+          <span className="text-sm">등록된 유저가 없습니다.</span>
+        </div>
+        <div className="w-full flex justify-center">
+          <button
+            className="w-full bg-[#0940af] text-white rounded-[8px]"
+            onClick={cancellClickHandler}
+          >
+            취소
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="bg-white absolute top-[50px] right-2 w-32 h-[50%] rounded-[9px] p-3 flex-col justify-between">
-      <div className="h-[90%] overflow-y-auto">
-        {filterUsers &&
-          filterUsers.map((el: Item, index: number) => (
-            <div key={index} className="w-full flex mb-4">
-              <div>
-                <input type="checkbox" onChange={e => checkHandler(e, el)} />
-              </div>
-              <div className="pl-3">
-                <span>{el.displayName}</span>
-              </div>
+    <div className="bg-white absolute top-[50px] right-2 w-56 h-[50%] rounded-[9px] p-3 flex-col justify-between">
+      <div className="h-[90%] overflow-y-auto p-2">
+        {users.map((user: UserInfo, index: number) => (
+          <div key={index} className="w-full flex mb-4 items-center">
+            <div>
+              <input type="checkbox" onChange={e => checkHandler(e, user)} />
             </div>
-          ))}
+            <div className="pl-3">
+              <span>{user.displayName}</span>
+            </div>
+          </div>
+        ))}
       </div>
       <div className="w-full flex justify-between">
         <button
-          className="bg-[#0940af] text-white rounded-[8px]"
+          className="w-[40%] bg-[#9E9E9E] text-white rounded-[8px]"
           onClick={cancellClickHandler}
         >
           취소
         </button>
         <button
-          className="bg-[#0940af] text-white rounded-[8px]"
+          className="w-[40%] bg-[#0940af] text-white rounded-[8px]"
           onClick={inviteClickHandler}
         >
           초대
