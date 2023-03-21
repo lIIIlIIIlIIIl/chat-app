@@ -1,7 +1,7 @@
-import { useRouter } from "next/router";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { validateEmail, validateNickname } from "../assets/InputCheck";
 import CompoOfInput from "../components/Input/compoOfInput";
+import { useRouteTo } from "../hooks/useRouter";
 import { signupFuc, userProfileFuc } from "../services/auth";
 import { searchData, usersInfoDB } from "../services/database";
 
@@ -12,7 +12,7 @@ const Signup = () => {
   const [passwordConfirm, setPasswordConfirm] = useState<string>("");
   const [errorMsg, setErrorMsg] = useState<string>("");
 
-  const router = useRouter();
+  const { routeTo, routeback } = useRouteTo();
 
   const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -48,12 +48,12 @@ const Signup = () => {
           userProfileFuc(nickname);
           usersInfoDB(email, nickname);
           searchData(nickname);
-          router.push("/home");
           setEmail("");
           setPassword("");
           setNickname("");
           setPasswordConfirm("");
           setErrorMsg("");
+          routeTo("/home");
         });
       } catch (error) {
         switch (error.code) {
@@ -92,9 +92,7 @@ const Signup = () => {
           <div className="w-full mt-5 flex justify-around">
             <button
               className="w-2/5 pt-1 pb-1 text-lg bg-[#fff700] rounded-[9px]"
-              onClick={() => {
-                router.back();
-              }}
+              onClick={routeback}
             >
               취소
             </button>

@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { useState } from "react";
 import { validateEmail } from "../assets/InputCheck";
 import CompoOfInput from "../components/Input/compoOfInput";
+import { useRouteTo } from "../hooks/useRouter";
 import { signInWithEmail } from "../services/auth";
 import { onUserConnect } from "../services/userStatus";
 
@@ -11,7 +11,7 @@ const Home = () => {
   const [password, setPassword] = useState<string>("");
   const [erroMes, setErroMsg] = useState<string>("");
 
-  const router = useRouter();
+  const { routeTo } = useRouteTo();
 
   const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -45,7 +45,7 @@ const Home = () => {
       ) {
         document.cookie = `member = ${result.user.accessToken}; path=/`;
         onUserConnect();
-        router.push("/userlist");
+        routeTo("/userlist");
       }
     }
   };
