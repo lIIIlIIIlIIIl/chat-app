@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Aside from "../components/aside";
 import GroupItem from "../components/groupItem";
 import GroupChatModal from "../components/Modal/groupChatModal";
 import InviteModal from "../components/Modal/inviteModal";
@@ -80,8 +79,7 @@ const Group = () => {
   };
 
   return (
-    <div className="w-screen h-screen flex">
-      <Aside />
+    <div className="w-full h-full flex">
       {isVisible && <GroupChatModal exitChatRoom={exitChatRoom} />}
 
       {!isVisible && (

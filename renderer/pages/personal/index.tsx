@@ -1,12 +1,10 @@
-import Aside from "../components/aside";
-import { useAppDispatch, useAppSelector } from "../helper/reduxHooks";
-import ChatModal from "../components/Modal/chatModal";
+import { useAppDispatch, useAppSelector } from "../../helper/reduxHooks";
+import ChatModal from "../../components/Modal/chatModal";
 import { useEffect, useState } from "react";
-import { getChatInfos, getChatRooms } from "../services/chat";
-import { modalActions } from "../store/reducer/modalSlice";
-import { chatActions } from "../store/reducer/chatSlice";
-import PersonalItem from "../components/personalItem";
-import { useRouter } from "next/router";
+import { getChatInfos, getChatRooms } from "../../services/chat";
+import { modalActions } from "../../store/reducer/modalSlice";
+import { chatActions } from "../../store/reducer/chatSlice";
+import PersonalItem from "../../components/personalItem";
 
 interface Chat {
   chat: { displayName: string; message: string; uid: string }[];
@@ -19,7 +17,6 @@ const Personal = () => {
   const [chatList, setChatList] = useState<Chat[]>([]);
   const { isVisible } = useAppSelector(state => state.modal);
 
-  const router = useRouter();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -32,18 +29,18 @@ const Personal = () => {
         });
       });
     };
+    setChatList([]);
+
     fetchChatData();
-  }, []);
+  }, [isVisible]);
 
   const exitChatRoom = (): void => {
     dispatch(modalActions.closeModal());
     dispatch(chatActions.chatClose());
-    router.push("/personal");
   };
 
   return (
     <div className="w-screen h-screen flex">
-      <Aside />
       {isVisible && <ChatModal exitChatRoom={exitChatRoom} />}
 
       {!isVisible && (

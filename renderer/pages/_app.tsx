@@ -7,23 +7,28 @@ import { auth } from "../services/firebase";
 import { useRouter } from "next/router";
 import { Provider } from "react-redux";
 import { store } from "../store";
+import GeneralLayout from "../components/Layout/GeneralLayout";
+import { useRouteTo } from "../hooks/useRouter";
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const router = useRouter();
+  const { routeTo } = useRouteTo();
   useEffect(() => {
     auth.onAuthStateChanged(user => {
       if (!user) {
-        router.push("/home");
+        routeTo("/home");
       }
     });
   }, []);
+
   return (
     <>
       <Head>
         <title>채팅 프로그램</title>
       </Head>
       <Provider store={store}>
-        <Component {...pageProps} />
+        <GeneralLayout>
+          <Component {...pageProps} />
+        </GeneralLayout>
       </Provider>
     </>
   );
