@@ -1,4 +1,5 @@
 import { useAppDispatch } from "../helper/reduxHooks";
+import { useRouteTo } from "../hooks/useRouter";
 import { chatActions } from "../store/reducer/chatSlice";
 import { modalActions } from "../store/reducer/modalSlice";
 
@@ -11,6 +12,7 @@ interface Porps {
 
 const PersonalItem = ({ nickname, message, audienceUid, roomUsers }: Porps) => {
   const dispatch = useAppDispatch();
+  const { routeTo } = useRouteTo();
 
   const startGroupChatWith = (): void => {
     dispatch(
@@ -20,7 +22,9 @@ const PersonalItem = ({ nickname, message, audienceUid, roomUsers }: Porps) => {
         roomUsers: roomUsers,
       })
     );
-    dispatch(modalActions.openModal());
+    routeTo(`/personal/${audienceUid}`);
+
+    // dispatch(modalActions.openModal());
   };
   return (
     <div className="w-full h-20 flex">
