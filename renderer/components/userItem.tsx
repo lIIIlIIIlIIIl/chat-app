@@ -1,6 +1,6 @@
-import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
 import { useAppDispatch } from "../helper/reduxHooks";
+import { useRouteTo } from "../hooks/useRouter";
 import { startChat } from "../services/chat";
 import { deleteMyUserList } from "../services/userStatus";
 import { chatActions } from "../store/reducer/chatSlice";
@@ -22,12 +22,13 @@ const UserItem = ({
   deleteUserFormUserList,
 }: Porps) => {
   const [viewBtn, setViewBtn] = useState<boolean>(false);
-  const router = useRouter();
+  const { routeTo } = useRouteTo();
   const dispatch = useAppDispatch();
 
   const startChatWith = useCallback(async () => {
-    await startChat(audienceUid);
+    const roomId = await startChat(audienceUid);
     setViewBtn(e => !e);
+
     dispatch(
       chatActions.chatOpen({
         roomId: audienceUid,
@@ -36,11 +37,7 @@ const UserItem = ({
       })
     );
 
-    dispatch(modalActions.openModal());
-
-    if (router.pathname !== "/person") {
-      router.push("/personal");
-    }
+    routeTo(`/personal/${roomId}`);
   }, []);
 
   const userClickHandler = () => {

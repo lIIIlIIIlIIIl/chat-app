@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouteTo } from "../../hooks/useRouter";
-import { getChatInfos } from "../../services/chat";
+import { getChatInfos, sendChat, startChatRoom } from "../../services/chat";
 import { auth } from "../../services/firebase";
 
 const myChatCssProps: React.CSSProperties = {
@@ -32,25 +32,68 @@ interface ChatInfo {
 }
 
 export default function PersonalChatPage() {
-  const [chat, setChat] = useState<ChatInfo>(null);
+  const [chat, setChat] = useState<ChatInfo>({ opponent: "", chatList: [] });
   const [chatInput, setChatInput] = useState<string>("");
-  const { routeTo, routeQuery } = useRouteTo();
+  const [isShiftUsed, setIsShiftUsed] = useState<boolean>(false);
 
+  const { routeTo, routeQuery } = useRouteTo();
+  const ref = useRef(window);
+  const messageEndRef = useRef(null);
   const roomId = routeQuery.opponent as string;
   const myName = auth.currentUser.displayName;
 
   useEffect(() => {
-    const getChat = async () => {
-      const roomInfo = await getChatInfos(roomId);
+    const handledMessageEvent = (e: CustomEvent) => {
+      if (!e.detail.users) return;
 
-      const opponent = Object.values(roomInfo.user)[0] as string;
-      const chatList = roomInfo.chat;
-
-      setChat({ opponent, chatList });
+      const opponent = Object.values(e.detail.users[0])[0] as string;
+      const chatList = e.detail.chat.filter((chat, index) => index !== 0);
+      setChat({
+        chatList,
+        opponent,
+      });
     };
 
-    getChat();
+    ref.current.addEventListener(`message/${roomId}`, handledMessageEvent);
+    startChatRoom(roomId);
+
+    return () => {
+      ref.current.removeEventListener(`message/${roomId}`, handledMessageEvent);
+    };
   }, []);
+
+  const sendMessage = (e): void => {
+    e.preventDefault();
+
+    if (chatInput === "") return;
+    sendChat(roomId, chatInput);
+    setChatInput("");
+  };
+
+  const keyUpHandler = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
+    if (e.key === "Shift") setIsShiftUsed(false);
+  };
+
+  const keyDownHandler = (
+    e: React.KeyboardEvent<HTMLTextAreaElement>
+  ): void => {
+    if (e.key === "Shift") setIsShiftUsed(true);
+    if (e.key === "Enter") {
+      if (e.nativeEvent.isComposing === false && isShiftUsed !== true) {
+        e.preventDefault();
+        sendMessage(e);
+      }
+    }
+  };
+
+  const scroolToBottom = (): void => {
+    if (messageEndRef.current === null) return;
+    messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scroolToBottom();
+  }, [chat]);
 
   return (
     <>
@@ -64,12 +107,12 @@ export default function PersonalChatPage() {
           </div>
         </div>
         <div className="w-full h-[65%] overflow-y-auto">
-          {chat &&
+          {chat.chatList &&
             chat.chatList.map((chatting, index: number) => {
               if (index === 0) return;
               if (chatting.displayName === myName) {
                 return (
-                  <div style={myChatCssProps} key={index}>
+                  <div ref={messageEndRef} style={myChatCssProps} key={index}>
                     <div
                       style={{
                         width: "fit-content",
@@ -87,13 +130,13 @@ export default function PersonalChatPage() {
                 );
               } else {
                 return (
-                  <div style={chatCssProps} key={index}>
+                  <div ref={messageEndRef} style={chatCssProps} key={index}>
                     {chatting.displayName}
                     <br />
                     <div
                       style={{
                         width: "fit-content",
-                        backgroundColor: "white",
+                        backgroundColor: "#EEEEEE",
                         borderRadius: "5px",
                         marginRight: "auto",
                         padding: "2px",
@@ -109,7 +152,7 @@ export default function PersonalChatPage() {
             })}
         </div>
         <div className="w-full h-[25%] bg-[#B3E5FC] border-t-2 border-[#00B0FF]">
-          <form className="h-full ">
+          <form className="h-full" onSubmit={sendMessage}>
             <div className="h-[70%]">
               <textarea
                 cols={10}
@@ -117,8 +160,8 @@ export default function PersonalChatPage() {
                 className="w-full h-full border-none  focus:outline-none p-3 pr-3 resize-none bg-[#B3E5FC]"
                 value={chatInput}
                 onChange={e => setChatInput(e.target.value)}
-                // onKeyDown={e => keyDownHandler(e)}
-                // onKeyUp={e => keyUpHandler(e)}
+                onKeyDown={e => keyDownHandler(e)}
+                onKeyUp={e => keyUpHandler(e)}
               />
             </div>
             <div className="h-[25%] w-full flex justify-end items-center pr-2">

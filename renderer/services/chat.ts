@@ -92,7 +92,7 @@ export const getChatInfos = async (uid: string) => {
 };
 
 export const startChatRoom = async (chatRoomUID: string) => {
-  const chatMessageRef = ref(database, `oneOnOneChatRooms/${chatRoomUID}/chat`);
+  const chatMessageRef = ref(database, `oneOnOneChatRooms/${chatRoomUID}`);
 
   onValue(chatMessageRef, snap => {
     let selectionFired = new CustomEvent(`message/${chatRoomUID}`, {
