@@ -5,16 +5,16 @@ import { auth } from "../../services/firebase";
 
 const myChatCssProps: React.CSSProperties = {
   width: "100%",
-  marginTop: "3px",
-  marginBottom: "3px",
+  marginTop: "10px",
+  marginBottom: "10px",
   textAlign: "right",
   wordBreak: "break-all",
   paddingRight: "5px",
 };
 const chatCssProps: React.CSSProperties = {
   width: "100%",
-  marginTop: "3px",
-  marginBottom: "3px",
+  marginTop: "10px",
+  marginBottom: "10px",
   textAlign: "left",
   wordBreak: "break-all",
   paddingLeft: "5px",
@@ -40,14 +40,16 @@ export default function PersonalChatPage() {
   const ref = useRef(window);
   const messageEndRef = useRef(null);
   const roomId = routeQuery.opponent as string;
-  const myName = auth.currentUser.displayName;
+  const myUid = auth.currentUser.uid;
 
   useEffect(() => {
     const handledMessageEvent = (e: CustomEvent) => {
       if (!e.detail.users) return;
 
       const opponent = Object.values(e.detail.users[0])[0] as string;
-      const chatList = e.detail.chat.filter((chat, index) => index !== 0);
+      const chatList = e.detail.chat.filter(
+        (chat: Chat, index: number) => index !== 0
+      );
       setChat({
         chatList,
         opponent,
@@ -88,7 +90,7 @@ export default function PersonalChatPage() {
 
   const scroolToBottom = (): void => {
     if (messageEndRef.current === null) return;
-    messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+    messageEndRef.current.scrollIntoView(false);
   };
 
   useEffect(() => {
@@ -110,20 +112,10 @@ export default function PersonalChatPage() {
           {chat.chatList &&
             chat.chatList.map((chatting, index: number) => {
               if (index === 0) return;
-              if (chatting.displayName === myName) {
+              if (chatting.uid === myUid) {
                 return (
                   <div ref={messageEndRef} style={myChatCssProps} key={index}>
-                    <div
-                      style={{
-                        width: "fit-content",
-                        backgroundColor: "rgb(248,227,76)",
-                        borderRadius: "5px",
-                        marginLeft: "auto",
-                        padding: "2px",
-                        paddingLeft: "5px",
-                        paddingRight: "5px",
-                      }}
-                    >
+                    <div className="w-fit ml-auto pt-1.5 pb-1.5 pr-2 pl-2.5 bg-[#f8e34c] rounded-lg">
                       {chatting.message}
                     </div>
                   </div>
@@ -133,17 +125,7 @@ export default function PersonalChatPage() {
                   <div ref={messageEndRef} style={chatCssProps} key={index}>
                     {chatting.displayName}
                     <br />
-                    <div
-                      style={{
-                        width: "fit-content",
-                        backgroundColor: "#EEEEEE",
-                        borderRadius: "5px",
-                        marginRight: "auto",
-                        padding: "2px",
-                        paddingLeft: "5px",
-                        paddingRight: "5px",
-                      }}
-                    >
+                    <div className="w-fit mr-auto pt-1.5 pb-1.5 pr-2 pl-2.5 bg-[#EEEEEE] rounded-lg">
                       {chatting.message}
                     </div>
                   </div>
