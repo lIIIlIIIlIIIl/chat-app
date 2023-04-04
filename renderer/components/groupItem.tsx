@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAppDispatch } from "../helper/reduxHooks";
+import { useRouteTo } from "../hooks/useRouter";
 import { groupActions } from "../store/reducer/groupSlice";
 import { modalActions } from "../store/reducer/modalSlice";
 
@@ -14,6 +15,8 @@ interface Porps {
 const GroupItem = ({ roomName, roomUid, message, roomUsers }: Porps) => {
   const dispatch = useAppDispatch();
   const [roomMembers, setRoomMembers] = useState<string[]>([]);
+
+  const { routeTo } = useRouteTo();
 
   useEffect(() => {
     const roomMember = [];
@@ -32,7 +35,7 @@ const GroupItem = ({ roomName, roomUid, message, roomUsers }: Porps) => {
         members: roomUsers,
       })
     );
-    dispatch(modalActions.openModal());
+    routeTo(`/group/${roomUid}`);
   };
 
   return (

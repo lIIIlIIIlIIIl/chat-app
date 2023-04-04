@@ -43,8 +43,7 @@ const InviteModal = ({ users }: Props) => {
   };
 
   const inviteClickHandler = async () => {
-    console.log(checkedList);
-    // startGroupChat(checkedList);
+    startGroupChat(checkedList);
     dispatch(modalActions.inviteModalClose());
   };
 

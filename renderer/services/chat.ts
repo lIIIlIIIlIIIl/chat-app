@@ -123,13 +123,12 @@ export const sendChat = async (chatRoomUID: string, message: string) => {
 // ------------------------
 // ------------------------
 
-interface OpponentUIDs {
-  connected: boolean | undefined;
+interface Opponen {
   displayName: string;
-  uid: string;
+  opponentUid: string;
 }
 
-export const startGroupChat = (opponentUIDs: OpponentUIDs[]) => {
+export const startGroupChat = (members: Opponen[]) => {
   const roomUserList = [];
   const me = {};
 
@@ -145,14 +144,14 @@ export const startGroupChat = (opponentUIDs: OpponentUIDs[]) => {
   set(myChatRoomRef, randomRoomID);
 
   //userChatRoom -> 초대된 유저 uid -> GroupChat-randomNumber -> 채팅방 이름
-  opponentUIDs.map((el: OpponentUIDs) => {
+  members.map((el: Opponen) => {
     const oppenent = {};
-    oppenent[el.uid] = el.displayName;
+    oppenent[el.opponentUid] = el.displayName;
     roomUserList.push(oppenent);
     // el.uid
     const opponentChatRoomRef = ref(
       database,
-      `groupChatRoom/${el.uid}/${randomString}`
+      `groupChatRoom/${el.opponentUid}/${randomString}`
     );
     set(opponentChatRoomRef, randomRoomID);
   });
