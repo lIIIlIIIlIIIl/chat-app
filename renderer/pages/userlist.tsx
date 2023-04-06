@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import GeneralLayout from "../components/Layout/GeneralLayout";
 import SearchModal from "../components/Modal/searchModal";
 import UserItem from "../components/userItem";
 import { getMyUserList } from "../services/userStatus";
@@ -35,39 +36,41 @@ const UserList = () => {
   };
 
   return (
-    <div className="w-full h-full bg-[#F0F2F5] relative">
-      {isModalOpen && (
-        <SearchModal
-          searchModalOnClickHandler={searchModalOnClickHandler}
-          isModalOpen={isModalOpen}
-        />
-      )}
-      <div className="absolute bottom-12 right-10 z-10">
-        <button
-          className="bg-white w-16 h-16 rounded-full"
-          onClick={searchModalOnClickHandler}
-        >
-          친구 추가
-        </button>
-      </div>
-      {userList.length === 0 ? (
-        <div className="w-full h-[10%] p-5">
-          <span>등록된 유저가 없습니다.</span>
+    <GeneralLayout>
+      <div className="w-full h-full bg-[#F0F2F5] relative">
+        {isModalOpen && (
+          <SearchModal
+            searchModalOnClickHandler={searchModalOnClickHandler}
+            isModalOpen={isModalOpen}
+          />
+        )}
+        <div className="absolute bottom-12 right-10 z-10">
+          <button
+            className="bg-white w-16 h-16 rounded-full"
+            onClick={searchModalOnClickHandler}
+          >
+            친구 추가
+          </button>
         </div>
-      ) : (
-        <ul className="w-full h-full pl-5 pr-5 overflow-y-auto">
-          {userList &&
-            userList.map((el: UserList, idx: number) => (
-              <UserItem
-                key={idx}
-                nickname={el.displayName}
-                audienceUid={el.opponentUid}
-                deleteUserFormUserList={deleteUserFormUserList}
-              />
-            ))}
-        </ul>
-      )}
-    </div>
+        {userList.length === 0 ? (
+          <div className="w-full h-[10%] p-5">
+            <span>등록된 유저가 없습니다.</span>
+          </div>
+        ) : (
+          <ul className="w-full h-full pl-5 pr-5 overflow-y-auto">
+            {userList &&
+              userList.map((el: UserList, idx: number) => (
+                <UserItem
+                  key={idx}
+                  nickname={el.displayName}
+                  audienceUid={el.opponentUid}
+                  deleteUserFormUserList={deleteUserFormUserList}
+                />
+              ))}
+          </ul>
+        )}
+      </div>
+    </GeneralLayout>
   );
 };
 

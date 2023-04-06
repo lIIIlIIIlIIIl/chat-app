@@ -4,18 +4,18 @@ import MenuButton from "./menubutton";
 
 interface MenuData {
   id: number;
-  text: string;
+  label: string;
   title: string;
   path: string;
 }
 
 const menuData = [
-  { id: 0, text: "유저 목록", title: "userList", path: "/userlist" },
-  { id: 1, text: "채팅", title: "personal", path: "/personal" },
-  { id: 2, text: "그룹 채팅", title: "group", path: "/group" },
+  { id: 0, label: "유저 목록", title: "userList", path: "/userlist" },
+  { id: 1, label: "채팅", title: "personal", path: "/personal" },
+  { id: 2, label: "그룹 채팅", title: "group", path: "/group" },
 ];
 
-const Nav = () => {
+const Sidbar = () => {
   const { routeTo } = useRouteTo();
 
   const onClickHandler = async () => {
@@ -27,7 +27,7 @@ const Nav = () => {
     <aside className="bg-[#0e0b53] h-full w-full">
       <ul>
         {menuData.map((el: MenuData) => (
-          <MenuButton text={el.text} key={el.id} path={el.path} />
+          <MenuButton label={el.label} key={el.id} path={el.path} />
         ))}
       </ul>
       <div
@@ -42,4 +42,4 @@ const Nav = () => {
   );
 };
 
-export default Nav;
+export default Sidbar;

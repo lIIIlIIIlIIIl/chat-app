@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import GroupItem from "../../components/groupItem";
+import GeneralLayout from "../../components/Layout/GeneralLayout";
 import InviteModal from "../../components/Modal/inviteModal";
 import { useAppDispatch, useAppSelector } from "../../helper/reduxHooks";
 import { getGroupChatInfos, getGroupChatRooms } from "../../services/chat";
@@ -70,32 +71,34 @@ const Group = () => {
   };
 
   return (
-    <div className="w-full h-full flex">
-      <div className="w-full h-full bg-[rgb(240,242,245)] relative">
-        {inviteView && <InviteModal users={users} />}
+    <GeneralLayout>
+      <div className="w-full h-full flex">
+        <div className="w-full h-full bg-[rgb(240,242,245)] relative">
+          {inviteView && <InviteModal users={users} />}
 
-        <div className="w-full h-[10%] flex justify-end pr-5">
-          <button
-            onClick={() => {
-              dispatch(modalActions.inviteModalOpen());
-            }}
-          >
-            그룹 채팅 만들기
-          </button>
+          <div className="w-full h-[10%] flex justify-end pr-5">
+            <button
+              onClick={() => {
+                dispatch(modalActions.inviteModalOpen());
+              }}
+            >
+              그룹 채팅 만들기
+            </button>
+          </div>
+          <ul className="w-full h-[90%] pl-5 bg-[#F0F2F5]">
+            {chatList.map((el: Chat, idx: number) => (
+              <GroupItem
+                key={idx}
+                roomName={el.room}
+                message={el.chat[el.chat.length - 1].message}
+                roomUid={el.uid}
+                roomUsers={el.roomUsers}
+              />
+            ))}
+          </ul>
         </div>
-        <ul className="w-full h-[90%] pl-5 bg-[#F0F2F5]">
-          {chatList.map((el: Chat, idx: number) => (
-            <GroupItem
-              key={idx}
-              roomName={el.room}
-              message={el.chat[el.chat.length - 1].message}
-              roomUid={el.uid}
-              roomUsers={el.roomUsers}
-            />
-          ))}
-        </ul>
       </div>
-    </div>
+    </GeneralLayout>
   );
 };
 

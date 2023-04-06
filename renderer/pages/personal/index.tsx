@@ -5,6 +5,7 @@ import { getChatInfos, getChatRooms } from "../../services/chat";
 import { modalActions } from "../../store/reducer/modalSlice";
 import { chatActions } from "../../store/reducer/chatSlice";
 import PersonalItem from "../../components/personalItem";
+import GeneralLayout from "../../components/Layout/GeneralLayout";
 
 interface Chat {
   chat: { displayName: string; message: string; uid: string }[];
@@ -40,24 +41,26 @@ const Personal = () => {
   };
 
   return (
-    <div className="w-screen h-screen flex">
-      {isVisible && <ChatModal exitChatRoom={exitChatRoom} />}
+    <GeneralLayout>
+      <div className="w-screen h-screen flex">
+        {isVisible && <ChatModal exitChatRoom={exitChatRoom} />}
 
-      {!isVisible && (
-        <ul className="w-full h-full pl-5 bg-[#F0F2F5] overflow-y-auto">
-          {chatList &&
-            chatList.map((el: Chat, idx: number) => (
-              <PersonalItem
-                key={idx}
-                nickname={Object.values(el.user)[0]}
-                message={el.chat[el.chat.length - 1].message}
-                audienceUid={el.uid}
-                roomUsers={el.roomUsers}
-              />
-            ))}
-        </ul>
-      )}
-    </div>
+        {!isVisible && (
+          <ul className="w-full h-full pl-5 bg-[#F0F2F5] overflow-y-auto">
+            {chatList &&
+              chatList.map((el: Chat, idx: number) => (
+                <PersonalItem
+                  key={idx}
+                  nickname={Object.values(el.user)[0]}
+                  message={el.chat[el.chat.length - 1].message}
+                  audienceUid={el.uid}
+                  roomUsers={el.roomUsers}
+                />
+              ))}
+          </ul>
+        )}
+      </div>
+    </GeneralLayout>
   );
 };
 

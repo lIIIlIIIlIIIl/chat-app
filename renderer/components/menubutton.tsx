@@ -6,7 +6,7 @@ import { groupActions } from "../store/reducer/groupSlice";
 import { modalActions } from "../store/reducer/modalSlice";
 
 interface Props {
-  text: string;
+  label: string;
   path: string;
 }
 
@@ -31,7 +31,7 @@ const MenuButton = (props: Props) => {
             props.path === router.pathname ? "text-[#93c5fd]" : "text-white"
           }
         >
-          {props.text}
+          {props.label}
         </a>
       </Link>
     </li>

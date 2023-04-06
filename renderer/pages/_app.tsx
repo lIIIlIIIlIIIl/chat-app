@@ -26,9 +26,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <title>채팅 프로그램</title>
       </Head>
       <Provider store={store}>
-        <GeneralLayout>
-          <Component {...pageProps} />
-        </GeneralLayout>
+        <Component {...pageProps} />
       </Provider>
     </>
   );
